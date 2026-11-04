@@ -48,7 +48,7 @@
   // the reading order: every page ends with a card to the next one
   const BOOK = [
     ['home', 'Home', 'Who I am and what I build, in ten seconds', U.home],
-    ['projects', 'Projects', `All ${ALL.length} projects and ${BRIEFS.length} smaller builds, 2021 → now`, U.projects],
+    ['projects', 'Projects', `All ${ALL.length} projects and ${BRIEFS.length} smaller builds, 2022 → now`, U.projects],
     ['about', 'About', 'The journey, the rules I design by, and the work beyond code', U.about],
     ['approach', 'How I work', 'One real engineering problem, how I run a pilot, the toolkit, and a small retrieval demo', U.approach]
   ];
@@ -303,7 +303,7 @@
     CHUNKS.push({ ref: a.id, label: `post ${a.n} · takeaway`, text: a.takeaway });
   });
   [
-    'I started in June 2021 as an intern on a form-extraction product: front-end first, then model work on key-value pairs, tables and checkboxes.',
+    'I started in January 2022 as an intern on a form-extraction product: front-end first, then model work on key-value pairs, tables and checkboxes.',
     'In 2023 I worked as a Java and Python developer on the document platform, then joined an NBFC client’s team from July to December to build co-lending platform modules.',
     'In 2024 I worked as an AI engineer: SaaS-partner integrations, voice-agent POCs, a first LLM fine-tune, model serving on Triton and Kubernetes, and the start of the US health-insurer work.',
     'I was promoted to Senior Software Engineer in April 2025.',
@@ -504,7 +504,7 @@
   function initProjects() {
     const REST = ALL.filter((p) => !p.featured);
     const years = [...new Set(REST.map((p) => p.yr))].sort((a, b) => b - a);
-    const yLabel = (y) => (y <= 2022 ? '2021–22' : String(y));
+    const yLabel = (y) => String(y);
     const groups = [['prod', 'in production'], ['delivered', 'delivered'], ['pilot', 'pilots'], ['proof', 'POCs'], ['design', 'designs'], ['internal', 'platform & R&D'], ['early', 'early releases']];
     const bucket = (p) => (p.status === 'ongoing' || p.status === 'stopped' ? 'pilot' : p.status);
     $('#pjStats').innerHTML = groups.map(([k, l]) => { const n = ALL.filter((p) => bucket(p) === k).length; return n ? `<span><b>${n}</b> ${l}</span>` : ''; }).join('');
@@ -606,7 +606,7 @@
     main.innerHTML = `
       <section class="pj-hero dark" aria-labelledby="pjTitle">
         <div class="wrap">
-          <nav class="crumbs mono" aria-label="Breadcrumb"><a href="${U.projects}">Projects</a><span aria-hidden="true">/</span><a href="${U.projects}#y${p.yr}">${p.yr <= 2022 ? '2021–22' : p.yr}</a><span aria-hidden="true">/</span><span aria-current="page">${i + 1} of ${ALL.length}</span></nav>
+          <nav class="crumbs mono" aria-label="Breadcrumb"><a href="${U.projects}">Projects</a><span aria-hidden="true">/</span><a href="${U.projects}#y${p.yr}">${p.yr}</a><span aria-hidden="true">/</span><span aria-current="page">${i + 1} of ${ALL.length}</span></nav>
           <div class="pj-tags mono"><span class="status ${p.status}">${esc(p.statusLabel)}</span><span>${esc(p.catLabel)}</span>${p.featured ? '<span class="pj-feat">★ Featured</span>' : ''}</div>
           <h1 id="pjTitle">${esc(p.title)}</h1>
           ${role ? `<p class="pj-role"><span class="mono">My role</span>${esc(role)}</p>` : ''}

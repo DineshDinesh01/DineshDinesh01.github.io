@@ -980,7 +980,7 @@ window.MORE = [
     fields: [
       ['Domain', 'Health-insurance, loan and commercial-appraisal forms'],
       ['Type', 'In-house product'],
-      ['Period', '2021 → Aug 2022'],
+      ['Period', 'Jan → Aug 2022'],
       ['My role', 'Intern → developer: Vaadin UI and Spring Boot backend, then data labelling, model training, serving and evaluation'],
       ['Status', 'Release 1.0 shipped internally; not taken to production']
     ],
