@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0f1016" />
+  <title>How I work · Dinesh Krishnamoorthy</title>
+  <meta name="description" content="How Dinesh Krishnamoorthy builds GenAI systems: a real page-25 limitation behind his data-first designs, the five stages of every pilot, every tool in the context it was used, and a tiny in-browser RAG over his work." />
+  <meta property="og:title" content="How I work · Dinesh Krishnamoorthy" />
+  <meta property="og:description" content="A demo shows a model. A pilot proves a system. The page-25 problem, the five pilot stages, the toolkit in context, and a tiny RAG that quotes and never invents." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://dineshdinesh01.github.io/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://dineshdinesh01.github.io/how-i-work.html" />
+  <meta name="twitter:image" content="https://dineshdinesh01.github.io/assets/og.png" />
+  <link rel="canonical" href="https://dineshdinesh01.github.io/how-i-work.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d9fc70'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='28' fill='%23111'%3EDK%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body data-page="approach">
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="siteTop"></div>
+
+  <main id="main">
+    <section class="page-hero dark" aria-labelledby="phTitle">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="wrap">
+        <span class="eyebrow">How I work</span>
+        <h1 id="phTitle">A demo shows a model.<br /><em class="it">A pilot proves a system.</em></h1>
+        <p class="lead">The engineering behind the projects: one real problem and how I designed around it, the five stages I take every pilot through, the tools grouped by job, and a small retrieval demo you can question.</p>
+        <nav class="ph-jump mono" aria-label="On this page"><a href="#story">01 · The page-25 problem</a><a href="#method">02 · How I run a pilot</a><a href="#toolkit">03 · Toolkit</a><a href="#ask">04 · Ask my work</a></nav>
+      </div>
+    </section>
+
+    <!-- ============ PROBLEM: page 25 (static) ============ -->
+    <section class="story-static paper" id="story" aria-labelledby="storyTitle">
+      <div class="wrap">
+        <div class="sec-head two rv">
+          <div><span class="eyebrow">01 · One real problem</span><h2 id="storyTitle">When a document pipeline<br /><em class="it">stopped at page 25.</em></h2></div>
+          <p class="lead">A document platform processed PDFs as individual files. Very large documents exposed a limitation: only the first 25 pages were processed, so information after that was lost. The system also had no idea of sections, and tables that ran across pages became separate tables. A bigger model could not fix any of that, because the data it needed was never stored.</p>
+        </div>
+        <figure class="ss-fig rv">
+          <img src="assets/datamodel.png" alt="Data model: a document is read two ways, as physical pages and as logical sections; both converge on the same elements (paragraphs, tables, figures, cells, with their position on the page), and each extracted value keeps evidence pointing back to its element, page and region. Every step writes a record of what went in and what came out, and nothing is overwritten." loading="lazy" />
+          <figcaption class="mono">The data contract I designed: pages and sections converge on the same elements, and every value keeps its evidence. Synthetic example.</figcaption>
+        </figure>
+        <div class="ss-grid">
+          <article class="ss rv"><span class="mono">01 · Every page, in one section</span><h3>Decompose first</h3><p>A document is split into logical sections, first by heuristics and then refined by a model, keeping both versions. Every page is processed in parallel and belongs to exactly one sub-section.</p></article>
+          <article class="ss rv d1"><span class="mono">02 · Structure</span><h3>Tables don’t stop at page breaks</h3><p>A table running across four pages used to be saved as four tables. Enrichment at sub-section level links the continuations back into one.</p></article>
+          <article class="ss rv d2"><span class="mono">03 · Lineage</span><h3>Immutable, replayable records</h3><p>Every stage writes an input audit, a result and an output audit, and results are never overwritten. Run, batch, source file, tenant, time and previous-stage id sit on every row, so any value traces back to its page.</p></article>
+          <article class="ss rv"><span class="mono">04 · Evidence</span><h3>The answer carries its page</h3><p>An answer comes back with where it came from: the page, the section and the element. Agents come last, once the data underneath can be trusted.</p></article>
+        </div>
+        <p class="ss-note mono">The real pilot this grew from involved an 800-page tender. Examples and diagrams on this page are synthetic. <a href="projects/largedocs.html">Full design on the project page →</a></p>
+      </div>
+    </section>
+
+    <!-- ============ METHOD: pilot lab ============ -->
+    <section class="method dark" id="method" aria-labelledby="methodTitle">
+      <div class="wrap">
+        <div class="sec-head two rv">
+          <div><span class="eyebrow">02 · How I run a pilot</span><h2 id="methodTitle">Five stages,<br /><em class="it">every time.</em></h2></div>
+          <p class="lead">The same five stages keep coming back, across bid emails, insurance faxes, tenders and engineering drawings. Pick a stage: each one names the projects where I learned it.</p>
+        </div>
+        <div class="lab-flow rv" aria-hidden="false">
+          <svg class="lab-svg" viewBox="0 0 1100 250" role="group" aria-label="Pilot pipeline with a human review loop at validation">
+            <defs><pattern id="lgrid" width="22" height="22" patternUnits="userSpaceOnUse"><path d="M22 0H0V22" fill="none" stroke="rgba(255,255,255,.045)"/></pattern></defs>
+            <rect width="1100" height="250" fill="url(#lgrid)"/>
+            <path id="lwire" class="wire-bg" d="M20 80 H110 C 225 80 225 150 340 150 C 455 150 455 80 570 80 C 685 80 685 150 800 150 C 915 150 915 80 1010 80 H1090"/>
+            <path class="wire" d="M20 80 H110 C 225 80 225 150 340 150 C 455 150 455 80 570 80 C 685 80 685 150 800 150 C 915 150 915 80 1010 80 H1090"/>
+            <path id="lloop" class="wire-bg loop" d="M790 182 C 770 200 760 226 800 226 C 840 226 830 200 810 182"/>
+            <g class="lab-node" data-lab="intake" tabindex="0" role="button" aria-label="Stage 1, intake and triage"><rect x="26" y="48" width="168" height="64" rx="14"/><text class="n" x="42" y="70">01</text><text class="t" x="42" y="90">Intake &amp; triage</text><text class="k" x="42" y="104">KNOW WHAT ARRIVED</text></g>
+            <g class="lab-node" data-lab="structure" tabindex="0" role="button" aria-label="Stage 2, data foundation"><rect x="256" y="118" width="168" height="64" rx="14"/><text class="n" x="272" y="140">02</text><text class="t" x="272" y="160">Data foundation</text><text class="k" x="272" y="174">STRUCTURE FIRST</text></g>
+            <g class="lab-node" data-lab="understand" tabindex="0" role="button" aria-label="Stage 3, retrieve and reason"><rect x="486" y="48" width="168" height="64" rx="14"/><text class="n" x="502" y="70">03</text><text class="t" x="502" y="90">Retrieve &amp; reason</text><text class="k" x="502" y="104">RIGHT TOOL, RIGHT JOB</text></g>
+            <g class="lab-node" data-lab="validate" tabindex="0" role="button" aria-label="Stage 4, validate and evaluate"><rect x="716" y="118" width="168" height="64" rx="14"/><text class="n" x="732" y="140">04</text><text class="t" x="732" y="160">Validate &amp; evaluate</text><text class="k" x="732" y="174">CHECK · ROUTE · RECOVER</text></g>
+            <g class="lab-node" data-lab="deliver" tabindex="0" role="button" aria-label="Stage 5, deliver"><rect x="926" y="48" width="168" height="64" rx="14"/><text class="n" x="942" y="70">05</text><text class="t" x="942" y="90">Deliver</text><text class="k" x="942" y="104">A CAPABILITY, NOT A DEMO</text></g>
+            <g class="lab-review"><rect x="738" y="212" width="124" height="28" rx="14"/><text x="800" y="230" text-anchor="middle">👤 human review</text></g>
+          </svg>
+        </div>
+        <div class="lab-grid rv">
+          <div class="lab-tabs" role="tablist" aria-label="Pilot stages">
+            <button class="lab-tab active" id="tab-intake" type="button" role="tab" aria-selected="true" aria-controls="labPanel" data-lab="intake"><span class="n">01</span><span><b>Intake &amp; triage</b><small>Know what arrived</small></span></button>
+            <button class="lab-tab" id="tab-structure" type="button" role="tab" aria-selected="false" aria-controls="labPanel" data-lab="structure" tabindex="-1"><span class="n">02</span><span><b>Data foundation</b><small>Structure before intelligence</small></span></button>
+            <button class="lab-tab" id="tab-understand" type="button" role="tab" aria-selected="false" aria-controls="labPanel" data-lab="understand" tabindex="-1"><span class="n">03</span><span><b>Retrieve &amp; reason</b><small>Right tool, right job</small></span></button>
+            <button class="lab-tab" id="tab-validate" type="button" role="tab" aria-selected="false" aria-controls="labPanel" data-lab="validate" tabindex="-1"><span class="n">04</span><span><b>Validate &amp; evaluate</b><small>Check, route, recover</small></span></button>
+            <button class="lab-tab" id="tab-deliver" type="button" role="tab" aria-selected="false" aria-controls="labPanel" data-lab="deliver" tabindex="-1"><span class="n">05</span><span><b>Deliver</b><small>A capability, not a demo</small></span></button>
+          </div>
+          <div class="lab-panel" id="labPanel" role="tabpanel" aria-labelledby="tab-intake" tabindex="0" aria-live="polite">
+            <div class="lab-top mono"><span id="labLabel">STAGE 01</span><span class="lab-chip" id="labChip"></span></div>
+            <h3 id="labTitle"></h3>
+            <p id="labDesc"></p>
+            <div class="lab-tokens" id="labTokens"></div>
+            <div class="lab-points" id="labPoints"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOOLKIT ============ -->
+    <section class="toolkit paper" id="toolkit" aria-labelledby="tkTitle">
+      <div class="wrap tk-grid">
+        <div class="tk-aside rv">
+          <span class="eyebrow">03 · Toolkit</span>
+          <h2 id="tkTitle">Tools follow<br /><em class="it">the problem.</em></h2>
+          <p class="lead">Grouped by the job each layer does. Each tool lists the projects where I used it in client or product work.</p>
+
+        </div>
+        <div class="tk-layers rv d1" id="tkLayers"></div>
+      </div>
+    </section>
+
+    <!-- ============ ASK: in-browser retrieval ============ -->
+    <section class="ask dark" id="ask" aria-labelledby="askTitle">
+      <div class="wrap">
+        <div class="sec-head two rv">
+          <div><span class="eyebrow">04 · Optional · retrieval demo</span><h2 id="askTitle">Ask my work.<br /><em class="it">It quotes, never invents.</em></h2></div>
+          <p class="lead">Ask anything about my work. This runs entirely in your browser: BM25 retrieval over every passage in the projects. There is no LLM here, so answers are quoted with their source. If nothing matches well enough, it says so instead of guessing.</p>
+        </div>
+        <div class="ask-grid rv">
+          <div class="ask-box">
+            <form class="ask-form" id="askForm" autocomplete="off">
+              <label for="askInput" class="sr">Ask a question about Dinesh’s work</label>
+              <input id="askInput" type="text" placeholder="e.g. How do you stop agents from drifting?" maxlength="140" />
+              <button class="btn" type="submit">Ask</button>
+            </form>
+            <div class="ask-sugg" id="askSugg"></div>
+            <div class="ask-ans" id="askAns" aria-live="polite"><p class="ask-empty mono">Pick a question above, or type your own.</p></div>
+          </div>
+          <div class="trace" id="trace" aria-label="Retrieval trace">
+            <div class="tr-head mono"><span>RETRIEVAL TRACE</span><span id="trN"></span></div>
+            <div class="tr-sec"><span class="tr-k mono">01 · QUERY → TERMS</span><div class="tr-tokens" id="trTokens"><span class="muted mono small">waiting for a question</span></div></div>
+            <div class="tr-sec"><span class="tr-k mono">02 · BM25 · TOP PASSAGES</span><div class="tr-bars" id="trBars"></div></div>
+            <div class="tr-sec"><span class="tr-k mono">03 · DECISION</span><div class="tr-dec mono" id="trDec">—</div></div>
+            <p class="tr-foot mono">k1 = 1.2 · b = 0.75 · abstains below a score threshold · nothing leaves your browser</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="siteBottom"></div>
+  <script src="assets/data.js"></script>
+  <script src="assets/scenes.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0f1016" />
+  <title>Projects · Dinesh Krishnamoorthy</title>
+  <meta name="description" content="Every project by Dinesh Krishnamoorthy, 2021 to now: agentic AI, RAG, document intelligence, model serving and backend systems. One page each, with an animated flow." />
+  <meta property="og:title" content="Projects · Dinesh Krishnamoorthy" />
+  <meta property="og:description" content="22 projects and 16 smaller builds, 2021 → now: agentic AI, RAG, document intelligence, model serving and backend systems. One page each." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://dineshdinesh01.github.io/assets/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content="https://dineshdinesh01.github.io/projects.html" />
+  <meta name="twitter:image" content="https://dineshdinesh01.github.io/assets/og.png" />
+  <link rel="canonical" href="https://dineshdinesh01.github.io/projects.html" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d9fc70'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial,sans-serif' font-weight='700' font-size='28' fill='%23111'%3EDK%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body data-page="projects">
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="siteTop"></div>
+
+  <main id="main">
+    <section class="page-hero dark" aria-labelledby="phTitle">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="wrap">
+        <span class="eyebrow">Projects · 2021 → now</span>
+        <h1 id="phTitle">Projects,<br /><em class="it">2021 → now.</em></h1>
+        <p class="lead">Five featured projects first, then everything else, newest first. Every project page opens with my role, then the problem, the design, what broke and what I learned. Clients are anonymized and every document shown is synthetic.</p>
+        <div class="ph-stats" id="pjStats"></div>
+      </div>
+    </section>
+
+    <section class="pj-index paper" aria-label="All projects">
+      <div class="wrap">
+        <section class="pj-feat-sec" id="pjFeatSec" aria-labelledby="featTitle">
+          <div class="sec-head two">
+            <div><span class="eyebrow">Featured engineering work · 5</span><h2 id="featTitle">Start here.</h2></div>
+            <p class="lead">The five that show the most: agentic AI in production, large-document architecture, an engineering copilot, healthcare document AI, and the platform behind 12 customer POCs.</p>
+          </div>
+          <div class="case-grid stack" id="pjFeat"></div>
+        </section>
+
+        <div class="sec-head two pj-other-head">
+          <div><span class="eyebrow">Other projects</span><h2>Everything else.</h2></div>
+          <p class="lead">Search covers every project, featured ones included. Filters apply to this list.</p>
+        </div>
+        <div class="pj-tools">
+          <div class="pj-tools-row">
+            <form class="pj-search" id="pjSearchForm" role="search"><span aria-hidden="true">⌕</span><input id="pjSearch" type="search" placeholder="Search: vLLM, checkboxes, agents, knowledge graph…" aria-label="Search projects" autocomplete="off" /></form>
+            <div class="pj-sugg" id="pjSugg"><span>try</span><button type="button" data-q="vLLM">vLLM</button><button type="button" data-q="agents">agents</button><button type="button" data-q="handwriting">handwriting</button><button type="button" data-q="knowledge graph">knowledge graph</button><button type="button" data-q="evaluation">evaluation</button></div>
+          </div>
+          <div class="pj-filters" id="pjFilters" role="group" aria-label="Filter by area"></div>
+        </div>
+
+        <div id="pjList"></div>
+        <p class="pj-empty" id="pjEmpty" hidden></p>
+
+        <section class="briefs" id="briefs" aria-labelledby="briefTitle">
+          <div class="sec-head two">
+            <div><span class="eyebrow">Smaller builds &amp; experiments</span><h2 id="briefTitle">The rest of the list.</h2></div>
+            <p class="lead">Tools, internal POCs and experiments that don’t need a page of their own. Where one belongs to a bigger project, it links there. <span class="mono small muted" id="briefN"></span></p>
+          </div>
+          <ul class="brief-list" id="briefList"></ul>
+        </section>
+
+        <p class="pj-integrity mono">Client names, client data, internal system names and client metrics are left out on purpose. Every number on these pages comes from my own work notes, and ongoing work is marked as ongoing.</p>
+      </div>
+    </section>
+  </main>
+
+  <div id="siteBottom"></div>
+  <script src="assets/data.js"></script>
+  <script src="assets/scenes.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
