@@ -226,7 +226,7 @@ window.CASES = [
   {
     id: 'pbm', n: '06', yr: 2025, end: '2025-06', client: 'US pharmacy-benefit prior-auth platform', related: ['health', 'serving', 'idp'], cats: ['document', 'serving'], catLabel: 'Model serving', status: 'delivered', statusLabel: 'Delivered in phases',
     title: 'Production readiness for a prior-auth platform',
-    short: 'For a US pharmacy-benefit prior-authorization platform: extraction services in 2023, then the 2025 push to production: serving chosen by measurement, confidence from log-probabilities, a fixed accuracy regression, GPU cost and monitoring.',
+    short: 'For a US pharmacy-benefit prior-authorization platform: extraction services in 2023, then the 2025 push to production: serverless GPU inference with autoscaling, serving chosen by measurement, confidence from log-probabilities, a fixed accuracy regression, GPU cost and monitoring.',
     hardq: 'Does the serving engine change accuracy, or only speed? And what should a confidence score be based on?',
     chips: ['vLLM', 'AWQ', 'Triton', 'Grafana', 'Detectron2'],
     fields: [
@@ -241,7 +241,9 @@ window.CASES = [
       ['Extraction services · 2023', 'Layout detection, my checkbox detector plus a state model, DETR tables, OCR for handwriting, a YOLO signature detector, face cropping and a zero-shot page filter. Served with FastAPI (thread pools for multi-page documents, models preloaded, CPU/GPU fallbacks) and called from the Java platform.'],
       ['Fax pipeline · 2024', 'A Java pipeline test harness with callbacks, and a key-value vision-language model consumer that calls Triton.'],
       ['End-to-end tests · 2025', '50-file runs, batch and per-PDF timing, and a total-cost-of-ownership sheet.'],
-      ['Serving', 'A quantized (AWQ) vision-language model on a cloud A100 and on serverless GPUs. I managed the serverless GPU budget.'],
+      ['Serving', 'A quantized (AWQ) vision-language model on a cloud A100 and on RunPod serverless GPUs. I managed the serverless GPU budget.'],
+      ['Serverless inference integration', 'Integrated a 72B AWQ vision-language model on RunPod serverless with the platform: images sent to the endpoint, network volumes so workers didn’t reload the model on every cold start, engine-timeout handling, and request batching per worker.'],
+      ['Worker autoscaling', 'A Java utility that works out the optimal number of workers and updates the serverless endpoint through its API, plus a design for predictive autoscaling from weekly load and a cost and time estimate.'],
       ['Prompt rules', 'Prescriber vs provider, synonym lists, per-template quirks, member-header priority (Member > Patient > Enrollee > Subscriber), drug strength vs quantity, NPI and ZIP fixes.'],
       ['Engine by measurement', 'vLLM and transformers compared on the same 20 files. vLLM was more accurate, so serving moved to vLLM.'],
       ['Confidence + monitoring', 'Field confidence from token log-probabilities, an agentic page filter, an urgency-triage improvement, load tests, and Grafana + Prometheus.']
@@ -253,12 +255,15 @@ window.CASES = [
       ['Confidence that means something', 'Per-field confidence from token log-probabilities instead of a self-reported score.'],
       ['Choosing the serving engine', 'Measured accuracy on the same files instead of assuming the engine only changes speed.'],
       ['A 7–10% accuracy regression', 'Found and fixed.'],
+      ['Slow cold starts on serverless GPUs', 'The model took over 3 minutes to load on each new worker; network volumes kept the weights attached, and engine timeouts and per-worker batching were tuned.'],
+      ['Paying for idle or too few workers', 'An autoscaling utility sets the worker count from demand through the endpoint API.'],
       ['Cost', 'Per-PDF timing, a cost sheet and a managed serverless GPU budget.']
     ],
-    tech: ['Python', 'FastAPI', 'LayoutParser', 'Detectron2', 'DETR', 'YOLO', 'doctr / EasyOCR / PaddleOCR', 'Java / Spring Boot platform', 'Triton', 'vLLM', 'AWQ quantization', 'Cloud A100', 'Serverless GPUs', 'Grafana', 'Prometheus'],
+    tech: ['Python', 'FastAPI', 'LayoutParser', 'Detectron2', 'DETR', 'YOLO', 'doctr / EasyOCR / PaddleOCR', 'Java / Spring Boot platform', 'Triton', 'vLLM', 'AWQ quantization', 'Cloud A100', 'RunPod serverless', 'Network volumes', 'Grafana', 'Prometheus'],
     impact: [
       'Took extraction from model demos to a measured, monitored setup, with serving decisions backed by test runs.',
-      'Recovered a 7–10% accuracy drop.'
+      'Recovered a 7–10% accuracy drop.',
+      'Ran a 72B vision-language model on serverless GPUs with worker autoscaling, so GPU cost followed the actual load.'
     ],
     learned: [
       'Measure serving choices on the same files. The engine can change accuracy, not only speed.',
