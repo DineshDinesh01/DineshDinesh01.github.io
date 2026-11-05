@@ -223,12 +223,19 @@
       <p class="case-hit" hidden></p>
     </article>`;
   }
+  function yrRange(p) {
+    const f = p.fields.find(([k]) => k === 'Period');
+    const ys = f ? (f[1].match(/20\d\d/g) || []).map(Number) : [];
+    if (!ys.length) return String(p.yr);
+    const lo = Math.min(...ys), hi = Math.max(...ys, p.yr);
+    return lo === hi ? String(hi) : `${lo}–${hi}`;
+  }
   function card(p) {
     const def = SCENES[p.id], n = def ? def.steps.length : 0;
     return `<article class="case rv" data-id="${p.id}" data-cats="${p.cats.join(' ')}">
       <div class="case-thumb"><div class="case-scene" aria-hidden="true"></div><span class="thumb-live mono"><i></i>live flow</span><span class="thumb-step mono">${n} steps</span></div>
       <div class="case-body">
-        <div class="case-meta mono"><span>${p.yr}</span><span aria-hidden="true">·</span><span>${esc(p.catLabel)}</span><span class="status ${p.status}">${esc(p.statusLabel)}</span></div>
+        <div class="case-meta mono"><span>${yrRange(p)}</span><span aria-hidden="true">·</span><span>${esc(p.catLabel)}</span><span class="status ${p.status}">${esc(p.statusLabel)}</span></div>
         <h3><a class="case-link" href="${U.project(p.id)}">${esc(p.title)}</a></h3>
         <p class="case-client">${esc(p.client)}</p>
         <p class="case-short">${esc(p.short)}</p>
@@ -402,7 +409,7 @@
       .sort((a, b) => b.s - a.s).slice(0, 3).map((o) => o.x.id);
   }
   function miniCard(p) {
-    return `<a class="mini" href="${U.project(p.id)}"><span class="mono">${p.yr} · ${esc(p.catLabel)}</span><b>${esc(p.title)}</b><small>${esc(p.client)}</small></a>`;
+    return `<a class="mini" href="${U.project(p.id)}"><span class="mono">${yrRange(p)} · ${esc(p.catLabel)}</span><b>${esc(p.title)}</b><small>${esc(p.client)}</small></a>`;
   }
 
   function initHome() {
@@ -416,7 +423,7 @@
     $('#featGrid').innerHTML = HOME.map((id) => byId[id]).filter(Boolean).map(card).join('');
     watchCards($('#featGrid'));
     const more = ALL.filter((p) => !p.featured);
-    if ($('#moreList')) $('#moreList').innerHTML = more.map((p) => `<li class="rv"><a href="${U.project(p.id)}"><span class="ml-yr mono">${p.yr}</span><span class="ml-t"><b>${esc(p.title)}</b><small>${esc(p.client)}</small></span><span class="status ${p.status}">${esc(p.statusLabel)}</span><span class="ml-go" aria-hidden="true">→</span></a></li>`).join('');
+    if ($('#moreList')) $('#moreList').innerHTML = more.map((p) => `<li class="rv"><a href="${U.project(p.id)}"><span class="ml-yr mono">${yrRange(p)}</span><span class="ml-t"><b>${esc(p.title)}</b><small>${esc(p.client)}</small></span><span class="status ${p.status}">${esc(p.statusLabel)}</span><span class="ml-go" aria-hidden="true">→</span></a></li>`).join('');
     if ($('#areaLinks')) $('#areaLinks').innerHTML = AREAS.map(([k, l]) => `<a class="area" href="${U.projects}?area=${k}"><b>${ALL.filter((p) => p.cats.includes(k)).length}</b>${esc(l)}</a>`).join('');
     if ($('#postTeaser')) $('#postTeaser').innerHTML = ARTICLES.slice(0, 4).map(postRow).join('');
     initHero();
@@ -653,9 +660,9 @@
       </section>
       <nav class="pager" aria-label="Previous and next project">
         <div class="wrap pager-in">
-          <a class="pg-card" href="${U.project(prev.id)}" rel="prev"><span class="mono">← Previous project</span><b>${esc(prev.title)}</b><small>${prev.yr} · ${esc(prev.catLabel)}</small></a>
+          <a class="pg-card" href="${U.project(prev.id)}" rel="prev"><span class="mono">← Previous project</span><b>${esc(prev.title)}</b><small>${yrRange(prev)} · ${esc(prev.catLabel)}</small></a>
           <a class="pg-all mono" href="${U.projects}">All ${ALL.length}<br />projects</a>
-          <a class="pg-card nx" href="${U.project(next.id)}" rel="next"><span class="mono">Next project →</span><b>${esc(next.title)}</b><small>${next.yr} · ${esc(next.catLabel)}</small></a>
+          <a class="pg-card nx" href="${U.project(next.id)}" rel="next"><span class="mono">Next project →</span><b>${esc(next.title)}</b><small>${yrRange(next)} · ${esc(next.catLabel)}</small></a>
         </div>
       </nav>`;
     const box = $('#pjScene');
