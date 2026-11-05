@@ -522,6 +522,10 @@
       const ps = REST.filter((p) => p.yr === y);
       return `<section class="yr-group" id="y${y}" aria-labelledby="yh${y}"><h2 class="yr-h" id="yh${y}"><span>${yLabel(y)}</span><small class="mono"></small></h2><div class="case-grid stack">${ps.map(card).join('')}</div></section>`;
     }).join('') + '<section class="yr-group" id="pjResults" aria-labelledby="yhR" hidden><h2 class="yr-h" id="yhR"><span>Results</span><small class="mono" id="pjResN"></small></h2><div class="case-grid stack" id="pjResGrid"></div></section>';
+    const yNav = document.createElement('nav'); yNav.className = 'pj-years mono'; yNav.setAttribute('aria-label', 'Jump to year');
+    yNav.innerHTML = '<span>Jump to</span>' + years.map((y) => `<a href="#y${y}">${y}</a>`).join('') + (BRIEFS.length ? '<a href="#briefs">smaller builds</a>' : '');
+    $('#pjList').before(yNav);
+    yNav.addEventListener('click', (e) => { const l = e.target.closest('a[href="#briefs"]'); if (l) { const d = $('.briefs-wrap'); if (d) d.open = true; } });
     $('#briefList').innerHTML = BRIEFS.map((b, i) => `<li class="brief" data-i="${i}"><span class="br-yr mono">${b.yr}</span><span class="br-main"><b>${esc(b.title)}</b><span>${esc(b.line)}</span></span><span class="br-side"><span class="chips">${b.tags.map((t) => `<span>${esc(t)}</span>`).join('')}</span>${b.rel ? `<a class="cite" href="${U.project(b.rel)}">${esc(short(b.rel))}</a>` : ''}</span></li>`).join('');
     watchCards($('#pjList'));
     const cardEls = Object.fromEntries($$('#pjList .case').map((c) => [c.dataset.id, c]));

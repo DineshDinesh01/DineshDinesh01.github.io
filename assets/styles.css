@@ -1675,3 +1675,24 @@ a.credential { color: inherit; text-decoration: none; } a.credential:hover { bor
 .tk-list li span a:hover { color: var(--violet2); text-decoration: underline; }
 .case .thumb-step { display: none; }
 .m-main { min-width: 0; } .pj-out { max-width: 100%; } .pj-out pre { white-space: pre; max-width: 100%; }
+/* projects page: readable at laptop sizes (checked at 1022×692) */
+.page-hero:has(+ .pj-index) { padding: 104px 0 36px; }
+.page-hero:has(+ .pj-index) h1 { font-size: clamp(40px, 5vw, 64px); }
+.pj-index .pj-other-head { margin-bottom: 14px; }
+.pj-index .pj-tools { position: static; margin: 0 0 6px; padding: 0; background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.pj-index .pj-sugg { display: none; }
+.pj-index .pj-filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin; padding-bottom: 4px; }
+.pj-index .pj-filters .filter { flex: none; }
+.pj-years { position: sticky; top: 64px; z-index: 50; display: flex; align-items: center; gap: 6px; margin: 8px 0 4px; padding: 8px 0; background: rgba(255,255,255,.96); border-bottom: 1px solid var(--line); font-size: 12px; overflow-x: auto; }
+.pj-years span { color: var(--muted); margin-right: 4px; text-transform: uppercase; letter-spacing: .08em; font-size: 10.5px; flex: none; }
+.pj-years a { flex: none; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink2); text-decoration: none; }
+.pj-years a:hover { border-color: var(--violet2); color: var(--violet2); }
+.pj-index .yr-group { scroll-margin-top: 120px; margin-top: 26px; }
+.pj-index .yr-h { font-size: clamp(26px, 2.6vw, 36px); }
+.pj-index .case-grid.stack { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.pj-index .case-thumb { padding-top: 26px; }
+.pj-index .case-scene { aspect-ratio: 960 / 380; }
+.pj-index .case-body h3 { font-size: 18px; line-height: 1.25; }
+.pj-index .case-short { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+@media (max-width: 900px) { .pj-index .case-grid.stack { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .pj-index .case-grid.stack { grid-template-columns: 1fr; } .pj-years { top: 56px; } }
