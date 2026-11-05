@@ -950,25 +950,28 @@ window.MORE = [
     id: 'formx', n: '22', yr: 2022, end: '2022-08', client: 'In-house product',
     cats: ['early', 'document'], catLabel: 'Early product', status: 'early', statusLabel: 'Release 1.0 · internal',
     title: 'My first product: a form extractor, one model per field',
-    short: 'Release 1.0 of an in-house form-extraction product for health-insurance, loan and appraisal forms. I joined as an intern on the UI and backend, then moved into data labelling, training and serving the extraction models.',
+    short: 'Release 1.0 of an in-house form-extraction product for health-insurance, loan and appraisal forms. I joined as an intern on the UI and backend, then worked on extraction models built from a research paper, Attend, Copy, Parse.',
     hardq: 'Every new field needed its own model. What does that teach you about designing extraction?',
     chips: ['Attend-Copy-Parse (ACP)', 'Spring Boot', 'Vaadin', 'Python serving'],
     fields: [
       ['Domain', 'Health-insurance, loan and commercial-appraisal forms'],
       ['Type', 'In-house product'],
+      ['Based on', 'Research paper: “Attend, Copy, Parse: End-to-end information extraction from documents” (Palm, Laws and Winther, 2019, arXiv:1812.04377)'],
       ['Period', 'Jan → Aug 2022'],
       ['My role', 'Intern → developer: Vaadin UI and Spring Boot backend, then data labelling, model training, serving and evaluation'],
       ['Status', 'Release 1.0 shipped internally; not taken to production']
     ],
     problem: 'Health insurers, lenders and commercial appraisers needed data out of forms without paying for manual entry. Off-the-shelf tools didn’t adapt to each domain’s custom layouts, and appraisal reports also carried information inside photos.',
     approach: [
-      ['Extraction model (ACP)', 'Based on the “Attend, Copy, Parse” (ACP) paper: attend over the text, copy the relevant tokens, parse them into a normalised value.'],
+      ['From the paper to the product', 'Worked from the “Attend, Copy, Parse” paper, which extracts fields end to end without word-level labels: the model attends over the words on the page, copies the relevant ones, and a parser turns them into a clean value such as a date or an amount.'],
+      ['Why it fit', 'The forms only had the final field values, not labelled words, which is exactly the case the paper was written for.'],
       ['One model per entity', 'Each field (patient name, loan amount…) had its own model, so a domain could add fields for its forms.'],
       ['Document handling', 'Key-value pairs, tables, images, and correction of rotated or skewed pages before extraction.'],
       ['Product', 'A Python model service behind a Spring Boot backend, with a Vaadin web UI to upload forms and review fields.']
     ],
     fixes: [
       ['Every new field needed a new model', 'The next release moved to one model per extraction type, plus templates.'],
+      ['Turning a paper into a product', 'A research model needs data labelling, serving, evaluation per field and a UI around it before anyone can use it.'],
       ['A product customers didn’t adopt', 'Learned to check product fit with design partners before building models.']
     ],
     tech: ['Java', 'Spring Boot', 'Vaadin', 'Python', 'Attend-Copy-Parse (ACP)', 'Data labelling', 'Model training', 'OCR'],
