@@ -303,9 +303,9 @@
     CHUNKS.push({ ref: a.id, label: `post ${a.n} · takeaway`, text: a.takeaway });
   });
   [
-    'I started in January 2022 as an intern on a form-extraction product: front-end first, then model work on key-value pairs, tables and checkboxes.',
+    'I started in January 2022 as an internship trainee, working as a Java developer on a form-extraction product: Vaadin UI and Spring Boot backend.',
     'In 2023 I worked as a Java and Python developer on the document platform, then joined an NBFC client’s team from July to December to build co-lending platform modules.',
-    'In 2024 I worked as an AI engineer: SaaS-partner integrations, voice-agent POCs, a first LLM fine-tune, model serving on Triton and Kubernetes, and the start of the US health-insurer work.',
+    'In 2024, as a Software Engineer, I worked on SaaS-partner integrations, voice-agent POCs, a first LLM fine-tune, model serving on Triton and Kubernetes, and the start of the US health-insurer work.',
     'I was promoted to Senior Software Engineer in April 2025.',
     'In 2026 I designed a data foundation and knowledge layers for very large documents, and I lead the technical effort on a manufacturing client’s document-copilot pilot.',
     'I am an NVIDIA-Certified Professional: Agentic AI (NCP-AAI), passed in July 2026.'

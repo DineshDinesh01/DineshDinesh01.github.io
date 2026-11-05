@@ -13,7 +13,7 @@ window.CASES = [
       ['Domain', 'Market research: bids for survey projects'],
       ['Type', 'Client delivery'],
       ['Period', 'Jun → Dec 2025'],
-      ['My role', 'AI engineer. Designed the agent framework’s core layer; built the pipeline, retrieval, pricing tools and evaluation loop; owned the GPU and runtime work'],
+      ['My role', 'Senior Software Engineer. Designed the agent framework’s core layer; built the pipeline, retrieval, pricing tools and evaluation loop; owned the GPU and runtime work'],
       ['Status', 'In production']
     ],
     problem: 'The client receives bid requests by email all day: requests for information, quote requests, negotiations, award and rejection notices. For every quote request, the bid team had to read the thread and attachments, work out what was being asked (markets, audiences, number of completes, interview length, incidence rate), find similar past projects, choose panel vendors that could deliver, and calculate and explain a price, quickly and consistently.',
@@ -142,7 +142,7 @@ window.CASES = [
       ['Domain', 'US healthcare: prior-authorization faxes, behavioral health, and grievance & appeals documents'],
       ['Type', 'Client delivery'],
       ['Period', 'Sep 2024 → Jul 2025'],
-      ['My role', 'AI engineer and single point of contact for the client: extraction design, prompts, synthetic data, evaluation, deployment support, status reporting'],
+      ['My role', 'Software Engineer, then Senior Software Engineer, and single point of contact for the client: extraction design, prompts, synthetic data, evaluation, deployment support, status reporting'],
       ['Status', 'Delivered in phases inside the client’s environment']
     ],
     problem: 'Prior-authorization requests arrive as faxes and forms in many layouts, printed and handwritten. Intake staff must capture member, requesting / servicing / referring provider, facility, service, diagnosis and admission details accurately. The client wanted extraction first, without changing their systems, then extended it to behavioral-health and grievance & appeals documents.',
