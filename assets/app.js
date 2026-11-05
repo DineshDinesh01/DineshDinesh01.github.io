@@ -982,3 +982,11 @@
   out.addEventListener('mouseout', (e) => { const t = e.target.closest('.jv[data-k]'); if (t) pair(t.dataset.k, false); });
   (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => setTimeout(run, 300));
 })();
+
+/* visit counts (GoatCounter: no cookies, no personal data); live site only */
+(function () {
+  if (location.hostname !== 'dineshdinesh01.github.io') return;
+  const s = document.createElement('script');
+  s.async = true; s.src = 'https://gc.zgo.at/count.js'; s.dataset.goatcounter = 'https://dineshk.goatcounter.com/count';
+  document.head.appendChild(s);
+})();
