@@ -516,7 +516,7 @@
     const yLabel = (y) => String(y);
     const groups = [['prod', 'in production'], ['delivered', 'delivered'], ['pilot', 'pilots'], ['proof', 'POCs'], ['design', 'designs'], ['internal', 'platform & R&D'], ['early', 'early releases']];
     const bucket = (p) => (p.status === 'ongoing' || p.status === 'stopped' ? 'pilot' : p.status);
-    $('#pjStats').innerHTML = groups.map(([k, l]) => { const n = ALL.filter((p) => bucket(p) === k).length; return n ? `<span><b>${n}</b> ${l}</span>` : ''; }).join('');
+    if ($('#pjStats')) $('#pjStats').innerHTML = groups.map(([k, l]) => { const n = ALL.filter((p) => bucket(p) === k).length; return n ? `<span><b>${n}</b> ${l}</span>` : ''; }).join('');
     $('#pjFilters').innerHTML = [['all', 'All']].concat(AREAS).map(([k, l]) => `<button class="filter${k === 'all' ? ' active' : ''}" type="button" data-area="${k}" aria-pressed="${k === 'all'}">${esc(l)} <span>${k === 'all' ? REST.length : REST.filter((p) => p.cats.includes(k)).length}</span></button>`).join('');
     $('#pjList').innerHTML = years.map((y) => {
       const ps = REST.filter((p) => p.yr === y);
