@@ -69,10 +69,7 @@
     const bi = BOOK.findIndex((b) => b[0] === PAGE);
     const nx = bi >= 0 ? BOOK[(bi + 1) % BOOK.length] : null;
     bottomSlot.outerHTML = `
-    ${nx ? `<nav class="next-page" aria-label="Next page"><div class="wrap np-in">
-      <a class="np-card" href="${nx[3]}"><span class="np-k mono">Next page · ${pad(((bi + 1) % BOOK.length) + 1)} / ${pad(BOOK.length)}</span><b>${esc(nx[1])} <span aria-hidden="true">→</span></b><small>${esc(nx[2])}</small></a>
-      <ol class="np-dots" aria-label="Pages">${BOOK.map((b, i) => `<li><a href="${b[3]}"${i === bi ? ' class="on" aria-current="page"' : ''}><span class="mono">${pad(i + 1)}</span>${esc(b[1])}</a></li>`).join('')}</ol>
-    </div></nav>` : ''}
+    
     <section class="contact dark" id="contact" aria-labelledby="ctTitle">
       <div class="wrap">
         <span class="eyebrow">Next conversation</span>
