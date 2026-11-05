@@ -13,7 +13,7 @@ window.CASES = [
       ['Domain', 'Market research: bids for survey projects'],
       ['Type', 'Client delivery'],
       ['Period', 'Jun → Dec 2025'],
-      ['My role', 'Senior Software Engineer. Designed the agent framework’s core layer; built the pipeline, retrieval, pricing tools and evaluation loop; owned the GPU and runtime work'],
+      ['My role', 'Senior Software Engineer on the delivery team. I built the email intake and classification, retrieval and reranking, the pricing tools and the evaluation loop, and handled the DevOps side: background workers, Kubernetes deployment, GPU memory fixes and the prompt store'],
       ['Status', 'In production']
     ],
     problem: 'The client receives bid requests by email all day: requests for information, quote requests, negotiations, award and rejection notices. For every quote request, the bid team had to read the thread and attachments, work out what was being asked (markets, audiences, number of completes, interview length, incidence rate), find similar past projects, choose panel vendors that could deliver, and calculate and explain a price, quickly and consistently.',
@@ -34,9 +34,9 @@ window.CASES = [
       ['Retrieval quality', 'Combined filters and vector search, then moved from a general cross-encoder to a dedicated reranker model.'],
       ['Silent drift', 'Built an evaluation loop: the same bid run ten times and diffed field by field, a confusion matrix for classification against labelled emails, stage-level confidence, and human corrections stored as data from an editable summary table.'],
       ['Inconsistent field extraction', 'Prepared per-field fine-tuning data with a question-generation agent, and checked platform limits and cost before training.'],
-      ['Runtime', 'Background processing on a task queue, chat-tool notifications, model work moved to dedicated workers to avoid GPU out-of-memory, and prompts versioned in a database.']
+      ['Runtime and DevOps', 'Celery + Redis workers on Kubernetes (TLS Redis, worker limits), fire-and-forget background ranking, model work moved to dedicated workers to stop GPU out-of-memory errors, secrets in a key vault, chat-tool notifications, and prompts versioned in a database with validation and rollback.']
     ],
-    tech: ['Python', 'FastAPI', 'AutoGen', 'LangChain (ReAct)', 'Azure OpenAI', 'PostgreSQL + pgvector', 'Cross-encoder + dedicated reranker', 'FAISS', 'Celery + Redis', 'Docker', 'Cloud event triggers', 'Playwright / LibreOffice'],
+    tech: ['Python', 'FastAPI', 'AutoGen', 'LangChain (ReAct)', 'Azure OpenAI', 'PostgreSQL + pgvector', 'Cross-encoder + dedicated reranker', 'FAISS', 'Celery + Redis', 'Docker', 'Kubernetes', 'Cloud event triggers', 'Key vault', 'Playwright / LibreOffice'],
     impact: [
       'Moved bid estimation from manual research to an automated, explained estimate, delivered in production.',
       'Every estimate shows why it is confident or not, so the bid team knows where to check.',
@@ -59,7 +59,7 @@ window.CASES = [
       ['Domain', 'Very large documents: tenders, specifications, policy packs, regulatory and engineering documents'],
       ['Type', 'In-house product architecture (my designs)'],
       ['Period', 'Data foundation Jan → Apr 2026 · knowledge layers Mar → Aug 2026'],
-      ['My role', 'Identified the architectural problem; designed the data architecture, data model and agent workflow; and authored the design documents. The knowledge-layer design was handed to a delivery team that is implementing it'],
+      ['My role', 'Wrote the problem statement, worked out the data model and the agent workflow, and wrote the design documents. The knowledge-layer design was handed to a delivery team that is implementing it'],
       ['Status', 'Data foundation partly built · knowledge layers being implemented by another team']
     ],
     problem: 'The existing document platform processed PDFs as individual files. Very large documents exposed a limitation: only the first 25 pages were processed, so information after that was lost; the system had no idea of sections; tables that ran across pages became separate tables; answers had no evidence; documents couldn’t be linked to each other; every question needed OCR again; and onboarding a new document type needed heavy configuration. Most of these were problems with how data was stored and structured, not with the model.',
@@ -133,34 +133,37 @@ window.CASES = [
     posts: []
   },
   {
-    id: 'health', n: '04', yr: 2025, end: '2025-07', client: 'US health insurer', related: ['pbm', 'timesheets', 'idp'], cats: ['document'], catLabel: 'Healthcare forms', status: 'delivered', statusLabel: 'Delivered',
-    title: 'Prior-auth faxes for a US health insurer',
-    short: 'Reads prior-authorization faxes section by section with vision models and domain rules, and shows reviewers exactly which fields still need a human check.',
+    id: 'health', n: '04', yr: 2025, end: '2025-07', client: 'US health insurer + US prior-auth platform', related: ['pbm', 'serving', 'timesheets'], cats: ['document', 'serving'], catLabel: 'Healthcare document AI', status: 'delivered', statusLabel: 'Delivered',
+    title: 'Prior-authorization document AI for two US healthcare clients',
+    short: 'For a US health insurer and a US prior-authorization platform: the engineering, the data and the models behind reading prior-auth faxes. Synthetic data, data validation, extraction with vision models and domain rules, serving and production readiness.',
     hardq: 'When one fax has three IDs and three providers, how does the system pick the right one, every time?',
-    chips: ['Qwen2-VL', 'vLLM', 'Synthetic data', 'Dashboards'],
+    chips: ['Vision models', 'vLLM', 'Synthetic data', 'Data validation'],
     fields: [
-      ['Domain', 'US healthcare: prior-authorization faxes, behavioral health, and grievance & appeals documents'],
+      ['Domain', 'US healthcare: prior-authorization faxes and forms, behavioral health, and grievance & appeals documents'],
       ['Type', 'Client delivery'],
-      ['Period', 'Sep 2024 → Jul 2025'],
-      ['My role', 'Software Engineer, then Senior Software Engineer, and single point of contact for the client: extraction design, prompts, synthetic data, evaluation, deployment support, status reporting'],
-      ['Status', 'Delivered in phases inside the client’s environment']
+      ['Period', 'May 2023 → Jul 2025 (platform client from 2023, insurer from Sep 2024)'],
+      ['My role', 'Software Engineer, then Senior Software Engineer. Engineering, data and model work end to end: synthetic data, data validation, extraction models and prompts, evaluation, serving and deployment. Single point of contact for the insurer'],
+      ['Status', 'Delivered in phases; production-readiness work for the platform client']
     ],
-    problem: 'Prior-authorization requests arrive as faxes and forms in many layouts, printed and handwritten. Intake staff must capture member, requesting / servicing / referring provider, facility, service, diagnosis and admission details accurately. The client wanted extraction first, without changing their systems, then extended it to behavioral-health and grievance & appeals documents.',
+    problem: 'Two clients, one problem. Prior-authorization requests arrive as faxes and forms in many layouts, printed and handwritten. Intake staff must capture member, requesting / servicing / referring provider, facility, service, diagnosis and admission details accurately. The client wanted extraction first, without changing their systems, then extended it to behavioral-health and grievance & appeals documents.',
     approach: [
       ['Per-section vision extraction', 'Separate prompts for member, servicing provider, referring provider, facility, service and diagnosis, each returning values with bounding boxes. This replaced one large prompt.'],
       ['Domain rules', 'Which ID is the primary member ID (not secondary or government IDs), how to tell servicing from referring providers, and section-header priority. Name clean-up and ID format checks ran as pipeline scripts.'],
       ['Versioned prompt store', 'Prompts versioned per tenant and document type.'],
       ['Synthetic data', 'Printed and handwritten samples generated from the client’s field rules (members, providers, ICD-10 codes, requested services), plus control data for testing.'],
       ['Evaluation + dashboards', 'Per-field accuracy against control data, touch-level buckets (no, low, one, high touch) showing how much human correction each document needs, and actual-vs-extracted dashboards.'],
-      ['Deployment', 'Inside the client’s isolated cloud environment (GPU VM, containers, managed database), with a simple upload-and-track UI.']
+      ['Deployment', 'Inside the client’s isolated cloud environment (GPU VM, containers, managed database, Kafka), with a simple upload-and-track UI, and a handover to the next engineer.'],
+      ['Checkbox detector (platform client)', 'Off-the-shelf detectors failed on real scans, so I built my own labelled dataset and trained a Detectron2 checkbox detector plus a checkbox-state model, alongside layout, table, handwriting and signature models behind FastAPI services.'],
+      ['Production readiness (platform client)', 'A large vision-language model on cloud GPUs and serverless GPUs: vLLM chosen over plain transformers after a 20-file accuracy test, field confidence from token log-probabilities, a fixed 7–10% accuracy drop, load tests, Grafana + Prometheus monitoring, and a cost-of-ownership sheet.']
     ],
     fixes: [
       ['One prompt doing everything badly', 'Split into per-section prompts with clear inclusion and exclusion rules.'],
       ['Look-alike fields', 'Several IDs and several providers on one form: explicit domain rules plus post-processing validation.'],
       ['Not enough labelled data, and privacy limits', 'Synthetic printed and handwritten samples built from the client’s own rules.'],
-      ['Proving progress', 'Field-level accuracy and touch-level reporting, weekly status updates, BRD/SOW updates and a project plan.']
+      ['Proving progress', 'Field-level accuracy and touch-level reporting, weekly status updates, BRD/SOW updates and a project plan.'],
+      ['No usable confidence score', 'Field confidence derived from the model’s token log-probabilities, so reviewers know where to look.']
     ],
-    tech: ['Qwen2-VL', 'Llama 3.2 Vision', 'vLLM', 'Python', 'Java pipeline actions', 'PostgreSQL', 'Superset', 'Docker / Podman', 'Streamlit', 'Kafka'],
+    tech: ['Qwen2-VL', 'Llama 3.2 Vision', 'vLLM', 'Detectron2', 'FastAPI', 'Python', 'Java pipeline actions', 'Grafana + Prometheus', 'PostgreSQL', 'Superset', 'Docker / Podman', 'Streamlit', 'Kafka'],
     impact: [
       'Delivered field-level extraction across multiple document types, with accuracy reporting the client could track.',
       'Gave intake teams a clear view of which documents need little or no correction.'
@@ -172,9 +175,9 @@ window.CASES = [
     posts: []
   },
   {
-    id: 'platform', n: '05', yr: 2025, end: '2025-06', client: 'In-house product + 12 customer POCs', related: ['formx', 'templates', 'idp'], cats: ['document', 'architecture'], catLabel: 'Platform + POCs', status: 'prod', statusLabel: 'Product + 12 POCs',
+    id: 'platform', n: '05', yr: 2025, end: '2025-06', client: 'In-house product + customer POCs', related: ['formx', 'templates', 'idp'], cats: ['document', 'architecture'], catLabel: 'Platform + POCs', status: 'prod', statusLabel: 'Product + POCs',
     title: 'A document AI platform, and the POCs built on it',
-    short: 'From a form-extraction intern project to agentic document intelligence, plus twelve customer POCs: engineering drawings, disaster-response timesheets, regulatory filings, invoices, voice agents and more.',
+    short: 'From a form-extraction intern project to agentic document intelligence, plus the customer POCs built on it: engineering drawings, disaster-response timesheets, regulatory filings, partner invoices and more.',
     hardq: 'No public dataset had checkboxes. How do you train a detector that works on real, noisy scans?',
     chips: ['Detectron2', 'YOLO', 'DETR', 'Triton', 'vLLM'],
     fields: [
@@ -200,7 +203,7 @@ window.CASES = [
     tech: ['Python', 'FastAPI', 'Django', 'Java / Spring Boot', 'Detectron2', 'YOLO', 'DETR', 'VGG16', 'doctr / PaddleOCR / Tesseract', 'LayoutParser', 'Mistral', 'Qwen-VL', 'Triton', 'ONNX', 'vLLM', 'Elasticsearch', 'Streamlit', 'Docker', 'Jenkins'],
     impact: [
       'Product in production across several releases; POCs delivered to customers across healthcare, finance, engineering and more.',
-      'A live showcase of ten use cases for an industry event: printed and handwritten key-values, faces, checkboxes, tables, figures, currency, bulletins, paragraphs and chat with documents.'
+      'Built the live showcase page of ten use cases for an industry technology event (Apr 2025), and showed the agentic document work at a national startup event and an industry conference.'
     ],
     learned: [
       'A platform grows by solving one hard element at a time: tables, checkboxes, handwriting, then whole documents.',
@@ -211,14 +214,11 @@ window.CASES = [
       ['Handwritten timesheets', 'US disaster-response staffing firm', 'Static-schema table extraction (names, signatures, phone, odometer readings), trained on synthetic handwritten samples generated from HTML replicas of the form.', '✎', 'timesheets'],
       ['Regulatory filings', 'US biotech company', 'Page title, section and page-number extraction with layout-aware prompts, an agent workflow, and search over Elasticsearch.', '§', 'filings'],
       ['Forms + timesheets', 'US company', 'Table plus checkbox detection and extraction; large-model testing on GPU.', '☑'],
-      ['Quotations + invoices', 'A fashion retailer’s vendors, via a SaaS workflow partner', 'Payment-terms extraction with an open LLM, multi-header tables, currency detection, and a webhook into the partner platform.', '¤', 'invoices'],
-      ['Invoices', 'UK finance company, via the same partner', 'Header fields with purchase-order lookup, pushed to the partner platform by webhook.', '⎙', 'invoices'],
+      ['Quotations + invoices', 'A SaaS workflow partner and two of its prospects', 'Payment terms with an open LLM, multi-header tables and currency for a retailer’s vendors; PO-checked invoice headers for a UK finance company; a live webhook into the partner platform.', '¤', 'invoices'],
       ['Document AI', 'Working-capital fintech', 'Document extraction POC.', '◫'],
-      ['Voice activation', 'Task-management tools', 'Speech → structured command → API action, with a confirm-before-run UI.', '◖', 'voice'],
-      ['Voice + knowledge', 'Postal-software company', 'Voice-driven parcel and location API calls.', '✉', 'voice'],
+      ['Voice agent', 'Task-management tools, then a postal-software company', 'Speech → structured command → API action, with a confirm-before-run UI; later pointed at parcel booking.', '◖', 'voice'],
       ['Survey programming', 'Healthcare survey research', 'Survey PDF → extraction agent → knowledge graph → generated survey forms.', '⋔', 'survey'],
-      ['Edge deployment', 'Kiosk / edge devices, several customers', 'Document AI POCs on edge devices.', '▣'],
-      ['Live showcase', 'Industry event', 'A demo page of 10 live use cases, from handwritten key-values to chat with documents.', '✦', 'showcase']
+      ['Edge deployment', 'Kiosk / edge devices, several customers', 'Document AI POCs on edge devices.', '▣']
     ],
     posts: []
   }
@@ -569,7 +569,7 @@ window.MORE = [
       ['Search landing on the wrong page', 'Sections indexed with their pages, and retrieval over those.']
     ],
     tech: ['Python', 'LlamaIndex AgentWorkflow', 'Pydantic', 'PyMuPDF / pdfplumber', 'LayoutParser', 'Haystack', 'Elasticsearch', 'Streamlit', 'PostgreSQL', 'Serverless GPU'],
-    impact: ['A working demo that finds sections and their pages in long regulatory documents.'],
+    impact: ['A hosted demo: ask for a section and get its title, level and page range, with running headers and footer codes left out.', 'A typed section tree for every submission, validated before indexing, so search points at the right pages.'],
     learned: [
       'Layout is part of the meaning. Position and font size tell you what a heading is.',
       'Validate the structure before you index it.'
@@ -580,8 +580,10 @@ window.MORE = [
       { t: 'Read pages', c: 'Each page is read with layout cues: size, position, style.', o: 'page info' },
       { t: 'Drop noise', c: 'Running headers and document codes are ignored, not read as titles.', o: 'header ✖', warn: true },
       { t: 'Build the tree', c: 'Sections and sub-sections become one validated hierarchy.', o: '§ 2.3.1' },
-      { t: 'Search', c: 'Sections are indexed with their pages, then searched.', o: '§ 2.3 · p.41 ✓' }
-    ] }
+      { t: 'Search', c: 'Sections are indexed with their pages, then searched.', o: '§ 2.3 · p.41 ✓' },
+      { t: 'Output', c: 'Each section comes back as JSON with its title, level and page range, ready to index or show in a table of contents.', o: '{ "title": "2.3 Clinical", "pages": [41, 58] }' }
+    ] },
+    output: { label: 'submission.pdf → sections.json (synthetic)', json: '{\n  "document": "submission.pdf",\n  "pages": 312,\n  "sections": [\n    { "id": "2", "title": "Product Quality", "level": 1, "pages": [12, 96],\n      "children": [\n        { "id": "2.3", "title": "Clinical Studies", "level": 2, "pages": [41, 58] },\n        { "id": "2.4", "title": "Stability Data", "level": 2, "pages": [59, 74] }\n      ] }\n  ],\n  "ignored": ["running header on every page", "document code in the footer"]\n}' }
   },
   {
     id: 'drawings', n: '13', yr: 2025, end: '2025-04', client: 'Indian engineering conglomerate',
@@ -662,38 +664,6 @@ window.MORE = [
       { t: 'Extract rows', c: 'A vision model fills a fixed set of keys for every row.', o: '8 rows × 7 keys' },
       { t: 'Check', c: 'Values are compared with synthetic samples whose answers are known.', o: 'diff vs truth' },
       { t: 'Export', c: 'Rows go out as structured data.', o: 'rows.json ✓' }
-    ] }
-  },
-  {
-    id: 'showcase', n: '15', yr: 2025, end: '2025-04', client: 'Industry technology event',
-    cats: ['document'], catLabel: 'Showcase', status: 'delivered', statusLabel: 'Shown live',
-    title: 'Ten live document-AI demos on one page',
-    short: 'I built the showcase page for an industry technology event: ten live use cases, from handwritten key-values to chat with a document. The same year, the agentic document-intelligence work was shown at a national startup event and an industry conference.',
-    hardq: '',
-    chips: ['Live demos', 'Vision models', 'Detection models'],
-    fields: [
-      ['Domain', 'Document AI demos for an external audience'],
-      ['Type', 'Event showcase'],
-      ['Period', 'Apr 2025 (plus events in Apr and Nov 2025)'],
-      ['My role', 'Built the page of ten live demos; showcased the platform at a startup event and travelled to an industry conference'],
-      ['Status', 'Shown live']
-    ],
-    problem: 'For an industry technology event, the team needed one place to show what the document platform could do, live, across many document types and elements.',
-    approach: [
-      ['Ten use cases', 'Printed and handwritten key-values, faces, checkboxes, tables, figures, chat with a document, currency, payment terms, paragraphs and résumés.'],
-      ['One page', 'Each use case as a live demo against the platform’s services.'],
-      ['Events', 'Agentic document intelligence shown at a national startup event (Apr 2025) and an industry conference (Nov 2025).']
-    ],
-    fixes: [],
-    tech: ['Python services', 'Vision-language models', 'Detection models', 'Web front end'],
-    impact: ['Ten capabilities shown live, in one place, to external audiences.'],
-    learned: ['A good demo shows a familiar document going in and checkable values coming out, in seconds.'],
-    posts: [], related: ['platform', 'idp'],
-    flow: { title: 'showcase · 10 demos', steps: [
-      { t: 'Pick a demo', c: 'Ten use cases on one page, from key-values to chat with a document.', o: '10 demos' },
-      { t: 'Upload', c: 'A sample document goes in.', o: 'form.png' },
-      { t: 'Extract', c: 'The matching service reads it.', o: 'KVP · table' },
-      { t: 'Show', c: 'Values appear next to the document, each with its box.', o: '12 fields ✓' }
     ] }
   },
   {
@@ -860,7 +830,8 @@ window.MORE = [
       ['Tables', 'YOLOv8 table detection, header-row detection and splitting for multi-header invoices, header matching by string similarity, and a table confidence score.'],
       ['Currency', 'Symbol lists and fuzzy matching, with non-Latin text kept intact.'],
       ['Webhook + validation', 'For the finance prospect: invoice header fields checked against a purchase-order lookup and pushed by an outbound webhook into the partner platform. The same webhook was reused for the second prospect.'],
-      ['Deployment', 'Jenkins jobs so the team no longer needed machine access, a cloud VM, and GPU-ready Docker images.']
+      ['Partner APIs + docs', 'Async API documentation and document-type / channel tables for the partner’s inbound API, so their team could wire new document types without me.'],
+      ['Deployment', 'Jenkins jobs so the team no longer needed machine access, a cloud VM, GPU-ready Docker images, and an environment for fine-tuning the open LLM.']
     ],
     fixes: [
       ['Pages scanned upside down', 'Orientation detection before OCR.'],
@@ -871,7 +842,7 @@ window.MORE = [
     tech: ['Python', 'FastAPI', 'Mistral-7B-Instruct', 'PaddleOCR / doctr', 'Tesseract OSD', 'YOLOv8', 'String similarity (difflib)', 'Webhooks', 'Docker', 'Jenkins', 'Cloud VM'],
     impact: [
       'Results flowed into the partner’s platform through a live webhook.',
-      'Demos on prospects’ document types in two countries.'
+      'Demos on prospects’ document types in two countries, including a live demo (Jan 2024) against a competitor that relied on custom training.', 'Tested on six sample sets across four use cases, then shown in a larger internal demo (Mar 2024).'
     ],
     learned: [
       'Integration is part of the product. A result that lands in the customer’s own tool gets used.',

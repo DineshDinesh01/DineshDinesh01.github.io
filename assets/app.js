@@ -13,7 +13,7 @@
   const B = document.body, PAGE = B.dataset.page || 'home', ROOT = B.dataset.root || '';
   const CASES = window.CASES || [], MORE = window.MORE || [], BRIEFS = window.BRIEFS || [], ARTICLES = window.ARTICLES || [];
   const LAB = window.LAB || {}, TOOLS = window.TOOLS || [], SCENES = window.SCENES || {}, Scene = window.Scene;
-  const FEATURED = ['copilot', 'largedocs', 'health', 'platform', 'bid'];
+  const FEATURED = ['bid', 'copilot', 'health', 'nbfc', 'largedocs'];
   [...CASES, ...MORE].forEach((c) => { c.featured = FEATURED.includes(c.id); });
   // newest first; on a tie the featured case file comes first
   const ALL = [...CASES, ...MORE].sort((a, b) => (a.end === b.end ? (b.featured ? 1 : 0) - (a.featured ? 1 : 0) : a.end < b.end ? 1 : -1));
@@ -22,9 +22,9 @@
   const live = (a) => a.status === 'Published' || a.status === 'Publishing soon';
   const EMAIL = 'dineshk12102000@gmail.com', LINKEDIN = 'https://www.linkedin.com/in/dinesh-krishnamoorthy-35422217a/', GITHUB = 'https://github.com/DineshDinesh01', MEDIUM = 'https://medium.com/@dineshk12102000';
   const SHORT = {
-    bid: 'bid-pricing agents', largedocs: 'large-document architecture', nbfc: 'co-lending platform', copilot: 'engineering copilot', health: 'prior-auth faxes',
+    bid: 'bid-pricing agents', largedocs: 'large-document architecture', nbfc: 'co-lending platform', copilot: 'engineering copilot', health: 'healthcare document AI',
     platform: 'document AI platform', pbm: 'prior-auth platform', tender: 'tender pilot', rfq: 'RFQ → proposal', rfpflow: 'RFP workflow',
-    survey: 'survey graph', filings: 'regulatory filings', drawings: 'drawing diff', timesheets: 'handwritten timesheets', showcase: 'live showcase',
+    survey: 'survey graph', filings: 'regulatory filings', drawings: 'drawing diff', timesheets: 'handwritten timesheets',
     serving: 'GPU serving', voice: 'voice agent', finetune: 'fine-tuning', invoices: 'partner invoices', idp: 'IDP release 3.0',
     templates: 'release 2.0', formx: 'first product'
   };
@@ -78,7 +78,7 @@
         <span class="eyebrow">Next conversation</span>
         <h2 class="ct-big" id="ctTitle">Get in <em class="it">touch.</em></h2>
         <div class="ct-row">
-          <p class="lead">I like teams solving hard document, retrieval and agent problems, where the system around the model matters as much as the model.</p>
+          <p class="lead">I like teams building real products with LLMs: agents, data platforms, voice and documents, where the engineering around the model matters as much as the model.</p>
           <div class="ct-actions">
             <button class="btn" type="button" data-action="email"><span>${EMAIL}</span> <span aria-hidden="true">⧉</span></button>
             <a class="btn ghost" href="${LINKEDIN}" target="_blank" rel="noopener">LinkedIn ↗</a>
@@ -184,7 +184,7 @@
         const x = 30 + i * 32.5;
         b += i === 6 || i === 7 ? `<rect class="nd9 code" x="${x - 9}" y="87" width="18" height="18" rx="3"/>` : `<circle class="nd9" cx="${x}" cy="96" r="9"/>`;
       }
-      b += '<circle class="runner" cx="30" cy="96" r="4"/><text x="210" y="130" class="cvt ac">code tools</text><text x="30" y="56" class="cvt">9 stages · evals catch drift</text>';
+      b += '<circle class="runner" cx="30" cy="96" r="4"/><text x="210" y="130" class="cvt ac">code tools</text><text x="30" y="56" class="cvt">agents + code tools · evals</text>';
     } else if (kind === 'rag') {
       const rows = [[0.9, 0], [0.6, 1], [0.75, 0], [0.42, 1], [0.82, 0]];
       rows.forEach(([w, bad], i) => {
@@ -214,6 +214,15 @@
   }
 
   /* ------------------------------------------------------------ project cards with live thumbnails */
+  function row(p) {
+    return `<article class="case pj-row" data-id="${p.id}" data-cats="${p.cats.join(' ')}">
+      <a class="pj-row-a" href="${U.project(p.id)}">
+        <span class="pj-row-main"><b>${esc(p.title)}</b><span class="pj-row-sub">${esc(p.client)} · ${esc(p.catLabel)}</span></span>
+        <span class="pj-row-side"><span class="status ${p.status}">${esc(p.statusLabel)}</span><span class="chips">${p.chips.slice(0, 3).map((t) => `<span>${esc(t)}</span>`).join('')}</span><span class="pj-row-go" aria-hidden="true">→</span></span>
+      </a>
+      <p class="case-hit" hidden></p>
+    </article>`;
+  }
   function card(p) {
     const def = SCENES[p.id], n = def ? def.steps.length : 0;
     return `<article class="case rv" data-id="${p.id}" data-cats="${p.cats.join(' ')}">
@@ -512,12 +521,12 @@
     $('#pjFeat').innerHTML = FEATURED.map((id) => byId[id]).filter(Boolean).map(card).join('');
     $('#pjList').innerHTML = years.map((y) => {
       const ps = REST.filter((p) => p.yr === y);
-      return `<section class="yr-group" id="y${y}" aria-labelledby="yh${y}"><h2 class="yr-h" id="yh${y}"><span>${yLabel(y)}</span><small class="mono"></small></h2><div class="case-grid stack">${ps.map(card).join('')}</div></section>`;
-    }).join('') + '<section class="yr-group" id="pjResults" aria-labelledby="yhR" hidden><h2 class="yr-h" id="yhR"><span>Results</span><small class="mono" id="pjResN"></small></h2><div class="case-grid stack" id="pjResGrid"></div></section>';
+      return `<section class="yr-group" id="y${y}" aria-labelledby="yh${y}"><h2 class="yr-h" id="yh${y}"><span>${yLabel(y)}</span><small class="mono"></small></h2><div class="pj-rows">${ps.map(row).join('')}</div></section>`;
+    }).join('') + '<section class="yr-group" id="pjResults" aria-labelledby="yhR" hidden><h2 class="yr-h" id="yhR"><span>Results</span><small class="mono" id="pjResN"></small></h2><div class="pj-rows" id="pjResGrid"></div></section>';
     $('#briefList').innerHTML = BRIEFS.map((b, i) => `<li class="brief" data-i="${i}"><span class="br-yr mono">${b.yr}</span><span class="br-main"><b>${esc(b.title)}</b><span>${esc(b.line)}</span></span><span class="br-side"><span class="chips">${b.tags.map((t) => `<span>${esc(t)}</span>`).join('')}</span>${b.rel ? `<a class="cite" href="${U.project(b.rel)}">${esc(short(b.rel))}</a>` : ''}</span></li>`).join('');
-    watchCards($('#pjList')); watchCards($('#pjFeat'));
+    watchCards($('#pjFeat'));
     const cardEls = Object.fromEntries($$('#pjList .case').map((c) => [c.dataset.id, c]));
-    const homes = Object.fromEntries(years.map((y) => [y, $(`#y${y} .case-grid`)]));
+    const homes = Object.fromEntries(years.map((y) => [y, $(`#y${y} .pj-rows`)]));
     const input = $('#pjSearch'), empty = $('#pjEmpty');
     const params = new URLSearchParams(location.search);
     let area = AREAS.some(([k]) => k === params.get('area')) ? params.get('area') : 'all';
@@ -557,7 +566,7 @@
           const p = byId[h.ref];
           if (!p || !inArea(p)) return;
           let el = cardEls[p.id];
-          if (!el) { const t = document.createElement('div'); t.innerHTML = card(p); el = cardEls[p.id] = t.firstElementChild; }
+          if (!el) { const t = document.createElement('div'); t.innerHTML = row(p); el = cardEls[p.id] = t.firstElementChild; }
           grid.appendChild(el);
           el.hidden = false;
           const hit = $('.case-hit', el);
@@ -575,7 +584,7 @@
       if (!shown) empty.innerHTML = `Nothing matched${q ? ` “${esc(q)}”` : ''}${area !== 'all' ? ` in ${esc(areaName[area])}` : ''}. <button class="linkish" type="button" data-reset>Show all ${ALL.length} projects</button>`;
       const vis = $$('.brief').filter((li) => !li.hidden).length;
       $('#briefN').textContent = q ? `${vis} of ${BRIEFS.length} match` : `${BRIEFS.length} builds`;
-      $('#briefs').hidden = q && !vis;
+      $('#briefs').hidden = q && !vis; const bw = $('.briefs-wrap'); if (bw && q) bw.open = vis > 0;
       const u = new URLSearchParams();
       if (area !== 'all') u.set('area', area);
       if (q) u.set('q', q);
@@ -632,6 +641,7 @@
             <section><h2 class="mono">${p.status === 'design' ? 'THE DESIGN' : 'WHAT I BUILT'}</h2><ol class="m-appr">${p.approach.map(([k, v]) => `<li><b>${esc(k)}</b><span>${esc(v)}</span></li>`).join('')}</ol></section>
             ${p.fixes.length ? `<section><h2 class="mono">WHAT BROKE → WHAT I CHANGED</h2><div class="m-fixes">${p.fixes.map(([a, b]) => `<div class="m-fix"><span class="br">${esc(a)}</span><span class="ar" aria-hidden="true">→</span><span class="ch">${esc(b)}</span></div>`).join('')}</div></section>` : ''}
             ${p.pocs ? `<section><h2 class="mono">THE ${p.pocs.length} CUSTOMER POCS · HOVER OR TAP A CARD</h2><div class="poc-grid">${p.pocs.map(([t, who, what, ic, link]) => `<div class="poc-cell"><button class="poc" type="button" aria-pressed="false" aria-label="${esc(t)} for ${esc(who)}: ${esc(what)}"><span class="poc-in"><span class="poc-f"><b class="poc-ic" aria-hidden="true">${esc(ic)}</b><strong>${esc(t)}</strong><small>${esc(who)}</small></span><span class="poc-b"><small class="mono">${esc(who)}</small>${esc(what)}</span></span></button>${link ? `<a class="poc-go mono" href="${U.project(link)}">Open: ${esc(short(link))} →</a>` : ''}</div>`).join('')}</div></section>` : ''}
+            ${p.output ? `<section><h2 class="mono">WHAT COMES OUT</h2><div class="pj-out"><div class="pj-out-h mono">${esc(p.output.label)}</div><pre class="mono">${esc(p.output.json)}</pre></div></section>` : ''}
             <section><h2 class="mono">IMPACT · NO INVENTED NUMBERS</h2><ul class="m-list">${p.impact.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></section>
             <section class="m-learn"><h2 class="mono">WHAT I LEARNED</h2>${p.learned.map((x) => `<p>${esc(x)}</p>`).join('')}</section>
             ${briefs.length ? `<section><h2 class="mono">SMALLER BUILDS THAT BELONG HERE</h2><ul class="m-list">${briefs.map((b) => `<li><b>${esc(b.title)}</b>: ${esc(b.line)}</li>`).join('')}</ul></section>` : ''}
@@ -916,4 +926,53 @@
   window.addEventListener('resize', onScroll);
   onScroll();
   window.__portfolio.player = () => pagePlayer;
+})();
+
+/* home hero: a beam reads the profile card and each field lands in extracted.json */
+(function () {
+  const doc = document.getElementById('hsDoc'), out = document.getElementById('hsJson');
+  if (!doc || !out) return;
+  const $ = (q) => document.getElementById(q);
+  const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const v = (k, t) => `<i class="jv" data-k="${k}">"${t}"</i>`;
+  const LINES = [
+    ['open', '{'],
+    ['name', `  <i class="jk">"name"</i>: ${v('name', 'Dinesh Krishnamoorthy')},`],
+    ['title', `  <i class="jk">"title"</i>: ${v('title', 'SSDE | GenAI Engineer &amp; AI Systems Design')},`],
+    ['role', `  <i class="jk">"role"</i>: ${v('role', 'Senior Software Engineer')},`],
+    ['w', `  <i class="jk">"works_with"</i>: [${v('w0', 'voice')}, ${v('w1', 'text')}, ${v('w2', 'documents')}, ${v('w3', 'business data')}],`],
+    ['shipped', `  <i class="jk">"in_production"</i>: <i class="jn">["bid pricing agents", "NBFC co-lending platform", "prior-auth document AI"]</i>,`],
+    ['projects', `  <i class="jk">"projects"</i>: <a class="jv" href="projects.html">"${(window.CASES || []).length + (window.MORE || []).length} →"</a>`],
+    ['close', '}']
+  ];
+  out.innerHTML = LINES.map(([k, h]) => `<span class="jl" data-line="${k}">${h}</span>`).join('');
+  const fields = [...doc.querySelectorAll('.hs-f[data-k]')];
+  const line = (k) => out.querySelector(`.jl[data-line="${/^w\d$/.test(k) ? 'w' : k}"]`);
+  const lines = [...out.querySelectorAll('.jl')];
+  let T = [], n = 0;
+  const set = (s, st) => { $('hsStatus').textContent = s; if (st) $('hsState').textContent = st; };
+  const count = () => { $('hsCount').textContent = n + ' / ' + fields.length + ' fields'; };
+  function final() { fields.forEach((f) => f.classList.add('on')); lines.forEach((l) => l.classList.add('show')); n = fields.length; count(); set('✓ read · hover a value to see its source', 'read ✓'); }
+  function run() {
+    T.forEach(clearTimeout); T = []; n = 0; count();
+    fields.forEach((f) => f.classList.remove('on')); lines.forEach((l) => l.classList.remove('show'));
+    const beam = $('hsBeam'); beam.classList.remove('run');
+    if (RM) { final(); return; }
+    set('layout · reading fields', 'reading…');
+    const H = doc.offsetHeight || 1, SW = 1900, T0 = 400;
+    doc.style.setProperty('--hsH', H + 'px'); void beam.offsetWidth; beam.classList.add('run');
+    T.push(setTimeout(() => line('open').classList.add('show'), T0));
+    fields.forEach((f) => {
+      const y = f.getBoundingClientRect().top - doc.getBoundingClientRect().top;
+      T.push(setTimeout(() => { f.classList.add('on'); line(f.dataset.k).classList.add('show'); n++; count(); }, T0 + Math.min(1, y / H) * SW));
+    });
+    T.push(setTimeout(() => { line('shipped').classList.add('show'); line('projects').classList.add('show'); line('close').classList.add('show'); set('validate · link evidence'); }, T0 + SW + 200));
+    T.push(setTimeout(final, T0 + SW + 900));
+  }
+  $('hsReplay').addEventListener('click', run);
+  const pair = (k, on) => { doc.querySelectorAll(`.hs-f[data-k="${k}"]`).forEach((e) => e.classList.toggle('hl', on)); out.querySelectorAll(`.jv[data-k="${k}"]`).forEach((e) => e.classList.toggle('hl', on)); };
+  fields.forEach((f) => { f.addEventListener('mouseenter', () => pair(f.dataset.k, true)); f.addEventListener('mouseleave', () => pair(f.dataset.k, false)); });
+  out.addEventListener('mouseover', (e) => { const t = e.target.closest('.jv[data-k]'); if (t) pair(t.dataset.k, true); });
+  out.addEventListener('mouseout', (e) => { const t = e.target.closest('.jv[data-k]'); if (t) pair(t.dataset.k, false); });
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(() => setTimeout(run, 300));
 })();
