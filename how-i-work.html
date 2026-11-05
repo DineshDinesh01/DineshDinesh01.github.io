@@ -42,7 +42,7 @@
       <div class="wrap">
         <div class="sec-head two rv">
           <div><span class="eyebrow">01 · One real problem</span><h2 id="storyTitle">When a document pipeline<br /><em class="it">stopped at page 25.</em></h2></div>
-          <p class="lead">A document platform processed PDFs as individual files. Very large documents exposed a limitation: only the first 25 pages were processed, so information after that was lost. The system also had no idea of sections, and tables that ran across pages became separate tables. A bigger model could not fix any of that, because the data it needed was never stored.</p>
+          <p class="lead">A document platform was built for short documents such as healthcare faxes, where a 25-page limit was fine. Then a tender pilot needed documents of 800 pages and more, with no page limit, and everything after page 25 was lost. The system also had no idea of sections, and tables that ran across pages became separate tables. A bigger model could not fix any of that, because the data it needed was never stored.</p>
         </div>
         <figure class="ss-fig rv">
           <img src="assets/datamodel.png" alt="Data model: a document is read two ways, as physical pages and as logical sections; both converge on the same elements (paragraphs, tables, figures, cells, with their position on the page), and each extracted value keeps evidence pointing back to its element, page and region. Every step writes a record of what went in and what came out, and nothing is overwritten." loading="lazy" />

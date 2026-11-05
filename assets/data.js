@@ -53,7 +53,7 @@ window.CASES = [
     id: 'largedocs', n: '02', yr: 2026, end: '2026-08', client: 'In-house product', related: ['tender', 'copilot', 'filings'], cats: ['architecture', 'document', 'rag'], catLabel: 'Data design', status: 'design', statusLabel: 'Design · being built',
     title: 'Very large documents: a data design that keeps every page',
     short: 'A data design for documents with hundreds of pages, so every answer can be traced back to its page, section and element. Another team is now building on it.',
-    hardq: 'Why did a document pipeline stop at page 25, and why didn’t a bigger model fix it?',
+    hardq: 'A platform built for 25-page healthcare faxes meets an 800-page tender. What has to change, and why isn’t a bigger model the answer?',
     chips: ['Data modelling', 'Vision retrieval', 'Knowledge graph (design)', 'Promoter–critic'],
     fields: [
       ['Domain', 'Very large documents: tenders, specifications, policy packs, regulatory and engineering documents'],
@@ -62,7 +62,7 @@ window.CASES = [
       ['My role', 'Wrote the problem statement, worked out the data model, the pipeline and the agent workflow, wrote the design documents and the MVP plan, and worked on the access model and the UI/UX revamp. The design was handed to a delivery team that is implementing it'],
       ['Status', 'Handed over · being implemented by another team']
     ],
-    problem: 'The existing document platform processed PDFs as individual files. Very large documents exposed a limitation: only the first 25 pages were processed, so information after that was lost; the system had no idea of sections; tables that ran across pages became separate tables; answers had no evidence; documents couldn’t be linked to each other; every question needed OCR again; and onboarding a new document type needed heavy configuration. Most of these were problems with how data was stored and structured, not with the model.',
+    problem: 'The document platform was built for short documents such as healthcare prior-authorization faxes, where a 25-page limit was fine. A tender pilot changed that: tenders run to 800 pages and more, and the platform had to handle documents with no page limit at all. Processing PDFs as individual files, capped at 25 pages, meant everything after page 25 was lost; the system had no idea of sections; tables that ran across pages became separate tables; answers had no evidence; documents couldn’t be linked to each other; every question needed OCR again; and onboarding a new document type needed heavy configuration. Most of these were problems with how data was stored and structured, not with the model.',
     approach: [
       ['Data foundation · hierarchy', 'File → document stack → project → use-case type, with role-based access at the project and use-case levels.'],
       ['Data foundation · decomposition first', 'Documents split into logical sections, first by heuristics, then refined by a model. Both versions are kept.'],
@@ -75,7 +75,7 @@ window.CASES = [
       ['Knowledge layers · formatting', 'Formats validated knowledge as key-value, table or paragraph, and never re-interprets it.']
     ],
     fixes: [
-      ['Data lost beyond page 25', 'The design processes every page in parallel, and each page belongs to exactly one sub-section.'],
+      ['A 25-page cap that suited faxes, not tenders', 'No page limit: every page is processed in parallel, and each page belongs to exactly one sub-section.'],
       ['Answers with no evidence', 'Lineage columns and evidence links make traceability part of the schema.'],
       ['Tables across pages', 'Sub-section-level enrichment links the continuations.'],
       ['Trusting the model', 'Truth is created in one layer only, after validation; formatting can’t change values.'],
@@ -87,7 +87,7 @@ window.CASES = [
       'The design was adopted, and another team now builds on it.'
     ],
     learned: [
-      'Get the data right first. A model can’t reason over a page that was never stored.',
+      'Get the data and the engineering right first. A model can’t reason over a page that was never stored.',
       'Lineage and evidence belong in the schema, not in a later feature.',
       'Agents are safe only on traceable, replayable data.'
     ],
