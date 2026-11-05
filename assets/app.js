@@ -226,7 +226,7 @@
   function card(p) {
     const def = SCENES[p.id], n = def ? def.steps.length : 0;
     return `<article class="case rv" data-id="${p.id}" data-cats="${p.cats.join(' ')}">
-      <div class="case-thumb"><div class="case-scene" aria-hidden="true"></div><span class="thumb-live mono"><i></i>${p.featured ? 'featured' : 'live flow'}</span><span class="thumb-step mono">${n} steps</span></div>
+      <div class="case-thumb"><div class="case-scene" aria-hidden="true"></div><span class="thumb-live mono"><i></i>live flow</span><span class="thumb-step mono">${n} steps</span></div>
       <div class="case-body">
         <div class="case-meta mono"><span>${p.yr}</span><span aria-hidden="true">·</span><span>${esc(p.catLabel)}</span><span class="status ${p.status}">${esc(p.statusLabel)}</span></div>
         <h3><a class="case-link" href="${U.project(p.id)}">${esc(p.title)}</a></h3>
@@ -511,22 +511,21 @@
   }
 
   function initProjects() {
-    const REST = ALL.filter((p) => !p.featured);
+    const REST = ALL.slice();
     const years = [...new Set(REST.map((p) => p.yr))].sort((a, b) => b - a);
     const yLabel = (y) => String(y);
     const groups = [['prod', 'in production'], ['delivered', 'delivered'], ['pilot', 'pilots'], ['proof', 'POCs'], ['design', 'designs'], ['internal', 'platform & R&D'], ['early', 'early releases']];
     const bucket = (p) => (p.status === 'ongoing' || p.status === 'stopped' ? 'pilot' : p.status);
     $('#pjStats').innerHTML = groups.map(([k, l]) => { const n = ALL.filter((p) => bucket(p) === k).length; return n ? `<span><b>${n}</b> ${l}</span>` : ''; }).join('');
     $('#pjFilters').innerHTML = [['all', 'All']].concat(AREAS).map(([k, l]) => `<button class="filter${k === 'all' ? ' active' : ''}" type="button" data-area="${k}" aria-pressed="${k === 'all'}">${esc(l)} <span>${k === 'all' ? REST.length : REST.filter((p) => p.cats.includes(k)).length}</span></button>`).join('');
-    $('#pjFeat').innerHTML = FEATURED.map((id) => byId[id]).filter(Boolean).map(card).join('');
     $('#pjList').innerHTML = years.map((y) => {
       const ps = REST.filter((p) => p.yr === y);
-      return `<section class="yr-group" id="y${y}" aria-labelledby="yh${y}"><h2 class="yr-h" id="yh${y}"><span>${yLabel(y)}</span><small class="mono"></small></h2><div class="pj-rows">${ps.map(row).join('')}</div></section>`;
-    }).join('') + '<section class="yr-group" id="pjResults" aria-labelledby="yhR" hidden><h2 class="yr-h" id="yhR"><span>Results</span><small class="mono" id="pjResN"></small></h2><div class="pj-rows" id="pjResGrid"></div></section>';
+      return `<section class="yr-group" id="y${y}" aria-labelledby="yh${y}"><h2 class="yr-h" id="yh${y}"><span>${yLabel(y)}</span><small class="mono"></small></h2><div class="case-grid stack">${ps.map(card).join('')}</div></section>`;
+    }).join('') + '<section class="yr-group" id="pjResults" aria-labelledby="yhR" hidden><h2 class="yr-h" id="yhR"><span>Results</span><small class="mono" id="pjResN"></small></h2><div class="case-grid stack" id="pjResGrid"></div></section>';
     $('#briefList').innerHTML = BRIEFS.map((b, i) => `<li class="brief" data-i="${i}"><span class="br-yr mono">${b.yr}</span><span class="br-main"><b>${esc(b.title)}</b><span>${esc(b.line)}</span></span><span class="br-side"><span class="chips">${b.tags.map((t) => `<span>${esc(t)}</span>`).join('')}</span>${b.rel ? `<a class="cite" href="${U.project(b.rel)}">${esc(short(b.rel))}</a>` : ''}</span></li>`).join('');
-    watchCards($('#pjFeat'));
+    watchCards($('#pjList'));
     const cardEls = Object.fromEntries($$('#pjList .case').map((c) => [c.dataset.id, c]));
-    const homes = Object.fromEntries(years.map((y) => [y, $(`#y${y} .pj-rows`)]));
+    const homes = Object.fromEntries(years.map((y) => [y, $(`#y${y} .case-grid`)]));
     const input = $('#pjSearch'), empty = $('#pjEmpty');
     const params = new URLSearchParams(location.search);
     let area = AREAS.some(([k]) => k === params.get('area')) ? params.get('area') : 'all';
@@ -566,7 +565,7 @@
           const p = byId[h.ref];
           if (!p || !inArea(p)) return;
           let el = cardEls[p.id];
-          if (!el) { const t = document.createElement('div'); t.innerHTML = row(p); el = cardEls[p.id] = t.firstElementChild; }
+          if (!el) { const t = document.createElement('div'); t.innerHTML = card(p); el = cardEls[p.id] = t.firstElementChild; }
           grid.appendChild(el);
           el.hidden = false;
           const hit = $('.case-hit', el);
@@ -579,7 +578,6 @@
         const briefHit = new Set(hits.filter((h) => h.ref.startsWith('brief:')).map((h) => h.ref.slice(6)));
         $$('.brief').forEach((li) => { li.hidden = !briefHit.has(li.dataset.i); });
       }
-      $('#pjFeatSec').hidden = !!q;
       empty.hidden = shown > 0;
       if (!shown) empty.innerHTML = `Nothing matched${q ? ` “${esc(q)}”` : ''}${area !== 'all' ? ` in ${esc(areaName[area])}` : ''}. <button class="linkish" type="button" data-reset>Show all ${ALL.length} projects</button>`;
       const vis = $$('.brief').filter((li) => !li.hidden).length;
