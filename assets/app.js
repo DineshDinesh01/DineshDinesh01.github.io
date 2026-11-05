@@ -22,7 +22,7 @@
   const live = (a) => a.status === 'Published' || a.status === 'Publishing soon';
   const EMAIL = 'dineshk12102000@gmail.com', LINKEDIN = 'https://www.linkedin.com/in/dinesh-krishnamoorthy-35422217a/', GITHUB = 'https://github.com/DineshDinesh01', MEDIUM = 'https://medium.com/@dineshk12102000';
   const SHORT = {
-    bid: 'bid-pricing agents', largedocs: 'large-document architecture', nbfc: 'co-lending platform', copilot: 'engineering copilot', health: 'healthcare document AI',
+    bid: 'bid-pricing agents', largedocs: 'large-document design', nbfc: 'co-lending platform', copilot: 'engineering copilot', health: 'healthcare document AI',
     platform: 'document AI platform', pbm: 'prior-auth platform', tender: 'tender pilot', rfq: 'RFQ → proposal', rfpflow: 'RFP workflow',
     survey: 'survey graph', filings: 'regulatory filings', drawings: 'drawing diff', timesheets: 'handwritten timesheets',
     serving: 'GPU serving', voice: 'voice agent', finetune: 'fine-tuning', invoices: 'partner invoices', idp: 'IDP release 3.0',

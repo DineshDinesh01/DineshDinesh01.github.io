@@ -50,17 +50,17 @@ window.CASES = [
     posts: []
   },
   {
-    id: 'largedocs', n: '02', yr: 2026, end: '2026-08', client: 'In-house product', related: ['tender', 'copilot', 'filings'], cats: ['architecture', 'document', 'rag'], catLabel: 'Architecture', status: 'design', statusLabel: 'My design · building',
-    title: 'Large-document architecture: when the document has hundreds of pages',
+    id: 'largedocs', n: '02', yr: 2026, end: '2026-08', client: 'In-house product', related: ['tender', 'copilot', 'filings'], cats: ['architecture', 'document', 'rag'], catLabel: 'Data design', status: 'design', statusLabel: 'Design · being built',
+    title: 'Very large documents: a data design that keeps every page',
     short: 'A data design for documents with hundreds of pages, so every answer can be traced back to its page, section and element. Another team is now building on it.',
     hardq: 'Why did a document pipeline stop at page 25, and why didn’t a bigger model fix it?',
     chips: ['Data modelling', 'Vision retrieval', 'Knowledge graph (design)', 'Promoter–critic'],
     fields: [
       ['Domain', 'Very large documents: tenders, specifications, policy packs, regulatory and engineering documents'],
-      ['Type', 'In-house product architecture (my designs)'],
+      ['Type', 'In-house product: data model, pipeline and design documents'],
       ['Period', 'Data foundation Jan → Apr 2026 · knowledge layers Mar → Aug 2026'],
-      ['My role', 'Wrote the problem statement, worked out the data model and the agent workflow, and wrote the design documents. The knowledge-layer design was handed to a delivery team that is implementing it'],
-      ['Status', 'Data foundation partly built · knowledge layers being implemented by another team']
+      ['My role', 'Wrote the problem statement, worked out the data model, the pipeline and the agent workflow, wrote the design documents and the MVP plan, and worked on the access model and the UI/UX revamp. The design was handed to a delivery team that is implementing it'],
+      ['Status', 'Handed over · being implemented by another team']
     ],
     problem: 'The existing document platform processed PDFs as individual files. Very large documents exposed a limitation: only the first 25 pages were processed, so information after that was lost; the system had no idea of sections; tables that ran across pages became separate tables; answers had no evidence; documents couldn’t be linked to each other; every question needed OCR again; and onboarding a new document type needed heavy configuration. Most of these were problems with how data was stored and structured, not with the model.',
     approach: [
@@ -83,8 +83,8 @@ window.CASES = [
     ],
     tech: ['Vision retrieval (ColQwen-style page embeddings)', 'Elasticsearch', 'Knowledge graph', 'PostgreSQL', 'Layout models', 'Vision-language OCR', 'LLM agents (validator / critic)', 'Python services'],
     impact: [
-      'Reframed large-document accuracy as a data-foundation problem, and turned it into a concrete architecture and data model.',
-      'The knowledge-layer design was adopted as the architecture another team now builds on.'
+      'Showed that large-document accuracy was a data problem first, and turned that into a data model and pipeline design.',
+      'The design was adopted, and another team now builds on it.'
     ],
     learned: [
       'Get the data right first. A model can’t reason over a page that was never stored.',
