@@ -5,8 +5,8 @@
 window.CASES = [
   {
     id: 'bid', n: '01', yr: 2025, end: '2025-12', client: 'Global market-research company', related: ['survey', 'finetune', 'voice'], cats: ['agentic', 'rag', 'backend'], catLabel: 'Agentic AI', status: 'prod', statusLabel: 'Production',
-    title: 'A 9-stage agentic pipeline to price market-research bids',
-    short: 'For a global market-research company: from an unstructured bid email to a priced, explained estimate. Agents for judgement, code for maths, evals to catch drift.',
+    title: 'A multi-agent pricing system for market-research bids',
+    short: 'For a global market-research company: several AI agents read an incoming bid email and produce a priced, explained estimate. Calculations run in code, and repeat runs check the results.',
     hardq: 'How do you stop a pipeline of agents from drifting quietly, while every output still looks like valid JSON?',
     chips: ['AutoGen', 'ReAct + tools', 'pgvector', 'Rerankers', 'Celery'],
     fields: [
@@ -52,9 +52,9 @@ window.CASES = [
   {
     id: 'largedocs', n: '02', yr: 2026, end: '2026-08', client: 'In-house product', related: ['tender', 'copilot', 'filings'], cats: ['architecture', 'document', 'rag'], catLabel: 'Architecture', status: 'design', statusLabel: 'My design · building',
     title: 'Large-document architecture: when the document has hundreds of pages',
-    short: 'My designs for very large documents: a data foundation where every answer traces back to its page, and five layers where truth is created in exactly one place.',
+    short: 'A data design for documents with hundreds of pages, so every answer can be traced back to its page, section and element. Another team is now building on it.',
     hardq: 'Why did a document pipeline stop at page 25, and why didn’t a bigger model fix it?',
-    chips: ['Data modelling', 'Vision retrieval', 'Knowledge graph', 'Promoter–critic'],
+    chips: ['Data modelling', 'Vision retrieval', 'Knowledge graph (design)', 'Promoter–critic'],
     fields: [
       ['Domain', 'Very large documents: tenders, specifications, policy packs, regulatory and engineering documents'],
       ['Type', 'In-house product architecture (my designs)'],
@@ -96,9 +96,9 @@ window.CASES = [
   {
     id: 'copilot', n: '03', yr: 2026, end: '2026-10', client: 'Global manufacturing client', related: ['rfq', 'drawings', 'serving'], cats: ['agentic', 'document', 'serving'], catLabel: 'Engineering documents', status: 'ongoing', statusLabel: 'Pilot · ongoing',
     title: 'An engineering document copilot',
-    short: 'For a global manufacturing client: compliance analysis of customer specifications against products, then a copilot that reads engineering diagrams, on models that run on-prem.',
+    short: 'For a global manufacturing client: compliance analysis of customer specifications against products, then a copilot that reads engineering diagrams, on models that run on the client’s own servers.',
     hardq: 'How do you turn “is this requirement compliant?” into an auditable answer with evidence, for every requirement in a long specification?',
-    chips: ['LangGraph', 'vLLM', 'Vision + MoE models', 'Elasticsearch'],
+    chips: ['LangGraph', 'vLLM', 'Vision models', 'Elasticsearch'],
     fields: [
       ['Domain', 'Electrical and industrial manufacturing: customer specifications, RFPs and engineering diagrams'],
       ['Type', 'Client delivery: POC won → production pilot'],
@@ -135,7 +135,7 @@ window.CASES = [
   {
     id: 'health', n: '04', yr: 2025, end: '2025-07', client: 'US health insurer', related: ['pbm', 'timesheets', 'idp'], cats: ['document'], catLabel: 'Healthcare forms', status: 'delivered', statusLabel: 'Delivered',
     title: 'Prior-auth faxes for a US health insurer',
-    short: 'Per-section vision extraction with domain rules, synthetic training data, and a touch-level view that shows exactly where humans still need to look.',
+    short: 'Reads prior-authorization faxes section by section with vision models and domain rules, and shows reviewers exactly which fields still need a human check.',
     hardq: 'When one fax has three IDs and three providers, how does the system pick the right one, every time?',
     chips: ['Qwen2-VL', 'vLLM', 'Synthetic data', 'Dashboards'],
     fields: [

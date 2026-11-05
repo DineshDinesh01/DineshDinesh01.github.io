@@ -13,7 +13,7 @@
   const B = document.body, PAGE = B.dataset.page || 'home', ROOT = B.dataset.root || '';
   const CASES = window.CASES || [], MORE = window.MORE || [], BRIEFS = window.BRIEFS || [], ARTICLES = window.ARTICLES || [];
   const LAB = window.LAB || {}, TOOLS = window.TOOLS || [], SCENES = window.SCENES || {}, Scene = window.Scene;
-  const FEATURED = ['bid', 'largedocs', 'copilot', 'health', 'platform'];
+  const FEATURED = ['copilot', 'largedocs', 'health', 'platform', 'bid'];
   [...CASES, ...MORE].forEach((c) => { c.featured = FEATURED.includes(c.id); });
   // newest first; on a tie the featured case file comes first
   const ALL = [...CASES, ...MORE].sort((a, b) => (a.end === b.end ? (b.featured ? 1 : 0) - (a.featured ? 1 : 0) : a.end < b.end ? 1 : -1));
@@ -76,7 +76,7 @@
     <section class="contact dark" id="contact" aria-labelledby="ctTitle">
       <div class="wrap">
         <span class="eyebrow">Next conversation</span>
-        <h2 class="ct-big" id="ctTitle">Let’s build something<br />that <em class="it">holds up.</em></h2>
+        <h2 class="ct-big" id="ctTitle">Get in <em class="it">touch.</em></h2>
         <div class="ct-row">
           <p class="lead">I like teams solving hard document, retrieval and agent problems, where the system around the model matters as much as the model.</p>
           <div class="ct-actions">
@@ -403,7 +403,7 @@
     if (m && (m[1] === 'case' ? byId[m[2]] : postById[m[2]])) { location.replace(m[1] === 'case' ? U.project(m[2]) : U.post(m[2])); return; }
     if (moved[h]) { location.replace(moved[h]); return; }
 
-    const HOME = ['bid', 'largedocs', 'copilot', 'health'];
+    const HOME = ['copilot', 'largedocs', 'health', 'bid'];
     $('#featGrid').innerHTML = HOME.map((id) => byId[id]).filter(Boolean).map(card).join('');
     watchCards($('#featGrid'));
     const more = ALL.filter((p) => !p.featured);
