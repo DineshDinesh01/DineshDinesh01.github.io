@@ -433,7 +433,7 @@
     jsonEl.innerHTML = [
       ['open', '{'],
       ['name', '  <i class="jk">"name"</i>: <i class="js" data-k="name">"Dinesh Krishnamoorthy"</i>,'],
-      ['title', '  <i class="jk">"title"</i>: <i class="js" data-k="title">"SSDE | GenAI Engineer &amp; AI Systems Design | Agentic AI · RAG"</i>,'],
+      ['title', '  <i class="jk">"title"</i>: <i class="js" data-k="title">"Senior Software Engineer | GenAI Engineer &amp; AI Systems Design | Agentic AI · RAG"</i>,'],
       ['thesis', '  <i class="jk">"thesis"</i>: <i class="js" data-k="thesis">"I design the system around the model."</i>,'],
       ['builds', '  <i class="jk">"builds"</i>: [<i class="js" data-k="b0">"document intelligence"</i>, <i class="js" data-k="b1">"RAG"</i>, <i class="js" data-k="b2">"agentic systems"</i>],'],
       ['evidence', `  <i class="jk">"projects"</i>: <a class="js" href="${U.projects}">"${ALL.length} projects + ${BRIEFS.length} smaller builds →"</a>`],
@@ -944,7 +944,7 @@
   const LINES = [
     ['open', '{'],
     ['name', `  <i class="jk">"name"</i>: ${v('name', 'Dinesh Krishnamoorthy')},`],
-    ['title', `  <i class="jk">"title"</i>: ${v('title', 'SSDE | GenAI Engineer &amp; AI Systems Design')},`],
+    ['title', `  <i class="jk">"title"</i>: ${v('title', 'GenAI Engineer &amp; AI Systems Design')},`],
     ['role', `  <i class="jk">"role"</i>: ${v('role', 'Senior Software Engineer')},`],
     ['w', `  <i class="jk">"works_with"</i>: [${v('w0', 'voice')}, ${v('w1', 'text')}, ${v('w2', 'documents')}, ${v('w3', 'business data')}],`],
     ['shipped', `  <i class="jk">"in_production"</i>: <i class="jn">["bid pricing agents", "NBFC co-lending platform", "prior-auth document AI"]</i>,`],
